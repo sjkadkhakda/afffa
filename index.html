@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- 音频自动循环播放 -->
+    <audio src="./audioes/1401568647-1-192.mp3"></audio>
+    <div id="app">
+        <!-- 登录界面 -->
+         <!-- 遮罩 -->
+         <div class="cover-page"></div>
+         <!-- 合法验证 -->
+        <div class="loginVerify">登录失败</div>
+        <div class="enrollVerify">用户名长度为3-16字符</div>
+        <!-- 登录界面 -->
+        <div class="login">
+            <img class="x" src="./images/x.png" alt="x">
+            <div class="page">
+                <div class="body">
+                    <img  class="login-image" src="./images/bqb01.gif">
+                    <div class="login-body">
+                        <img class="login-logo" src="./images/logo2.png">
+                        <div class="login-tabs">
+                            <div class="login-tab">用户登录<div class="login-tab-select"></div></div>
+                            <div class="enroll-tab">用户注册<div class="login-tab-tab-select"></div></div>
+                        </div>
+                        <div class="login-content">
+                            <div class="login-user"><input class="input" id="input1" placeholder="请输入用户名"><img class="clearInputX" src="./images/X2.png" alt="X"></div>        
+                            <div class="login-password"><input type="password" class="input" id="input2" placeholder="请输入密码"></div>
+                            <div class="enroll-ensurePassword"><input type="password" class="input" id="input3" placeholder="请确认密码"></div>
+                            <div class="login-botton"><p>登录</p></div>
+                            <div class="enroll-botton"><p>注册并登录</p></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--导航栏  -->
+        <div class="menu">
+            <button id="toTop"></button>
+            <div class="menu-list">
+            <div class="menu-content">
+                <div class="menu-icon"><img class="logo" src="./images/logo.png" alt="picture"></div>
+                <div class="menu-item hr"><a href="#selection1">猪猪侠</a></div>
+                <div class="menu-item hr"><a href="#selection2">英雄展示</a></div>
+                <div class="menu-item hr"><a href="#selection3">产品库</a></div>
+                <div class="menu-item hr"><a href="#selection4">新春快乐</a></div>
+                <div class="menu-item hr"><a href="#selection5">猪猪商城</a></div>
+            </div>
+        <!-- 搜索栏 -->
+            <div class="Searchbox">
+                <form action="/search" method="get">
+                    <input type="text" name="q" placeholder="搜索...">
+                </form>
+            </div>
+            <div class="user-icon">
+                <div class="menu-title-signin">登录</div>
+                <div class="menu-title-black-block">注册</div>
+                <img class="UserAvatar" src="./images/UserAvatar/UserAvatar.png" alt="UserAvatar">
+                <div class="dropdown-content">
+                    <div class="UserInformation">
+                    <img class="dropdownAvatar" src="./images/UserAvatar/UserAvatar.png" alt="UserAvatar">
+                    <div class="dropdownUsername"></div>
+                    </div>
+                    <hr>
+                    <div class="Modify-information">账号设置</div>
+                    <div class="SignOut">退出登录</div>
+                </div>
+            </div>
+            </div>    
+        </div>
+        <div class="index">
+             <!-- 展示页 -->
+             <div class="head selection"  id="selection1">
+                <video autoplay muted loop class="video-background">
+                    <source src="./vedioes/1401568647-1-192.mp4" type="video/mp4">
+                </video>
+                <img src="./images/生成特定字样.png"  class="name" alt="picture">
+            </div>
+            <!-- 英雄展示 -->
+            <div class="displayHero selection" id="selection2">
+                <h1>英雄展示</h1>
+                <div class="allSides">
+                <div class="leftSide"></div>
+                <div class="front"></div>
+                <div class="rightSide"></div>
+               </div>
+                <div class="heroNameBox"><a class="heroName" href="https://baike.baidu.com/item/%E7%8C%AA%E7%8C%AA%E4%BE%A0/9565890" target="_blank">猪猪侠</a></div>
+            </div>
+            
+             <div class="productLibrary selection" id="selection3">
+                <h1>产品库</h1>
+                <div class="product-item">
+                    <div class="product-item-shadow"></div>
+                    <div class="product-item-img"></div>
+                    <div class="product-item-info">
+                        <div class="info-title"></div>
+                        <div class="info-detail"></div>
+                        <div class="info-alink">点击查看详情</div>
+                    </div>
+                    
+                </div>
+                <div class="product-item">
+                    <div class="product-item-shadow"></div>
+                    <div class="product-item-img"></div>
+                    <div class="product-item-info">
+                        <div class="info-title"></div>
+                        <div class="info-detail"></div>
+                        <div class="info-alink">点击查看详情</div>
+                    </div>
+                   
+                </div>
+                    <div class="product-item">
+                    <div class="product-item-shadow"></div>
+                    <div class="product-item-img"></div>
+                    <div class="product-item-info"><div class="info-title"></div>
+                    <div class="info-detail"></div>
+                    <div class="info-alink">点击查看详情</div>
+                </div>
+                
+                </div>
+             </div>
+             <!-- 活动倒计时 -->
+             <div class="countdown selection" id="selection4">
+                <h1>新春倒计时</h1>
+                <img class="happyNewYears" src="./images/happyNewYear.png" alt="picture">
+                <div class="all-group">
+                <div class="Uplink"><img src="./images/downlink.jpg"  alt="picture"></div>
+                <div class="bgd">
+                    <div class="activity">猪猪侠提醒您据过年还有</div>
+                    <div class="day"><div class="dnumber"><p class="dn"></p></div><p>天</p></div>
+                    <div class="hour"><div class="hnumber"><p class="hn"></p></div><p>时</p></div>
+                    <div class="minute"><div class="mnumber"><p class="mn"></p></div><p>分</p></div>
+                    <div class="second"><div class="snumber"><p class="sn"></p></div><p>秒</p></div>
+                </div>
+                <div class="Downlink"> <img src="./images/uplink.jpg" alt="picture"></div>
+            </div>
+             </div>
+        </div>
+        <div class="market selection5">
+            <div class="shop"> <img class="shop-img" src="./images/生成特定字样.png" alt=""><p class="shop-name">猪猪商城</p></div>
+            <div class="product-page">
+                <div class="product"><img class="product-img" alt="picture"><P class="product-name"></P><p class="product-price"></p></div>
+                <div class="product"><img class="product-img" alt="picture"><P class="product-name"></P><p class="product-price"></p></div>
+                <div class="product"><img class="product-img" alt="picture"><P class="product-name"></P><p class="product-price"></p></div>
+            </div>
+            <div class="purchase">
+                <img class="purchase-product" src="" alt="">
+                <img class="purchase-show" src="" alt="">
+                <div class="purchase-lens"></div>
+                <div class="purchase-box">
+                    <div class="purchase-name"></div>
+                    <div class="purchase-price"></div>
+                    <div class="buy">已售罄</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="over">
+            <hr>
+            <p>本网站由涂济炜、朱显杰共同制作</p>
+        </div>
+        
+    </div>
+    <script src="ggb.js" type="text/javascript"></script>
+</body>
+
+</html>
