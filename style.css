@@ -1,4 +1,3 @@
-
 a {
     text-decoration: none;
     color: inherit;
@@ -78,8 +77,10 @@ form {
 }
 .Searchbox{
     margin-top: 18px;
+    display: flex;
+    align-items: center;
 }
-input[type="text"] {
+.Searchbox input[type="text"] {
     width: calc(100% - 60px);
     padding: 10px;
     border-radius: 5px;
@@ -89,8 +90,11 @@ input[type="text"] {
     box-shadow: none;
     background-color: #f9f9f9;
     transition: all .5s ease-in-out;
-    margin-bottom: -1px;
-} 
+}
+.Searchbox input[type="text"]:focus {
+    border-color: #0078d4;
+    box-shadow: 0 0 5px rgba(0,120,212,0.3);
+}
 .index{
     width: 100%;
     background-color: rgba(255, 255, 255, 0.884);
@@ -185,14 +189,14 @@ video{
 }
 .displayHero{
     margin-top: 100px;
-    height: 1000px;
+    height: 800px;
 }
 .displayHero h1{
     color: rgba(30,30,30,1);
     font-family: "微软雅黑";
     position: absolute;
     left: 100px;
-    top: 150px;
+    top: 50px;
 }
 .heroNameBox{
     width: 200px;
@@ -221,12 +225,11 @@ video{
     cursor: pointer;
 }
 
-
-
 .countdown{
-    width: 100%;
-    height: 100vh;
-    margin-top: 100px;
+    margin: 0 auto;
+    width: 1600px;
+    height: 700px;
+    margin-top: 200px;
     color: rgb(223, 82, 82);
     display: flex;
     flex-direction: column;
@@ -340,21 +343,28 @@ video{
     z-index: 999; /* 确保按钮在页面上层显示 */
     transition: all 0.8s ease; /* 添加过渡效果，让显示隐藏更平滑 */
 }
-.productLibrary h1{
-     color: rgba(30,30,30,1);;
-     font-family: "微软雅黑";
-     margin-left: 50px;
-     padding-top: 200px;
-}
+
 .productLibrary{
-    padding-top: 50px;
+    margin-top: 100px;
+    width: 1500px;
+    height: 2100px;
+    margin: 0 auto;
+    position: relative;
+}
+.productLibrary h1{
+    color: rgba(30,30,30,1);
+    font-family: "微软雅黑";
+    position: absolute;
+    left: 100px;
+    top: -100px;
 }
 .product-item {
     width: 1200px;
     height: 550px;
     margin: 0 auto;
     position: relative;
-    margin-top: 100px;
+    margin-top: 200px;
+
 }
 .product-item-shadow{
     position: absolute;
@@ -418,7 +428,7 @@ color: white;
 }
 .over{
     width: 100%;
-    height: 50px;
+    height: 300px;
     text-align: center;
     color: darkgray;
 }
@@ -768,21 +778,21 @@ color: white;
     width: 600px;
     height: 600px;
     border-radius: 10px;
-    
-    margin-left: 10px;
     margin: 5px;
+    position: relative;
+    overflow: hidden;
 }
 .purchase-lens{
-    position: absolute;
     width: 600px;
     height: 600px;
     border-radius: 10px;
     background-color: white;
-    opacity: 0.5;
-    cursor: zoom-in;
+    position: absolute;
     left: 880px;
-    border: 1px solid black;
+    top: 300px;
+    border: 1px solid #ddd;
     display: none;
+    overflow: hidden;
 }
 .purchase-box{
     width: 900px;
@@ -812,4 +822,129 @@ color: white;
     margin-left: 30px;
     text-align: center;
     padding-top: 10px;
+}
+.mask {
+    width: 200px;
+    height: 200px;
+    position: absolute;
+    background-color: rgba(255, 255, 255, 0.3);
+    border: 1px solid #ccc;
+    display: none;
+    cursor: move;
+}
+.purchase-show-img {
+    width: 600px;
+    height: 600px;
+    display: block;
+    position: absolute;
+}
+.purchase-lens-img {
+    width: 1200px;
+    height: 1200px;
+    position: absolute;
+}
+.change-information {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 500px;
+    background: white;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    z-index: 1000;
+    display: none;
+}
+
+.change-x {
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    cursor: pointer;
+}
+
+.change-x img {
+    width: 20px;
+    height: 20px;
+}
+
+.change-title {
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 30px;
+    color: #333;
+}
+
+.change-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.avatar-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.current-avatar {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    margin-bottom: 15px;
+}
+
+.change-avatar-btn {
+    padding: 8px 15px;
+    background: #f0f0f0;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.change-avatar-btn:hover {
+    background: #e0e0e0;
+}
+
+.info-section {
+    width: 100%;
+}
+
+.change-item {
+    margin-bottom: 20px;
+}
+
+.change-item label {
+    display: block;
+    margin-bottom: 5px;
+    color: #666;
+}
+
+.change-input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.change-submit {
+    width: 200px;
+    height: 40px;
+    background: #ff3c00;
+    color: white;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: background 0.3s;
+}
+
+.change-submit:hover {
+    background: #e63600;
 }

@@ -136,6 +136,7 @@ backToTopButton.addEventListener('click', function () {
     var productShadow=document.querySelectorAll('.product-item-shadow')
     var infoDetails=document.querySelectorAll('.info-detail')
     var infotitles=document.querySelectorAll('.info-title')
+    var infoAlink=document.querySelectorAll('.info-alink')
     //产品库
     var productData=[
         {img:'./images/superbangbangtang.jpg',imgShadow:'./images/superbangbangtangshadow.jpg', productName:'超级棒棒糖',introduce:'拥有神奇的力量', price:888},
@@ -358,8 +359,8 @@ localStorage.setItem(key, JSON.stringify(userArray));
 
 //存储用户数组
 var users = [
-{ userName: "TJW", Password: "123456" },
-{ userName: "ZXJ", Password: "123456" }
+    { userName: "TJW", Password: "123456", avatar: "./images/UserAvatar/UserAvatar.png" },
+    { userName: "ZXJ", Password: "123456", avatar: "./images/UserAvatar/UserAvatar.png" }
 ];
 storeUserArray('users', users);
 /// 检索用户数据数组
@@ -389,45 +390,68 @@ clearInput()
 
 //注册合法验证
 enrollBotton.addEventListener('click',function(){
-var input=document.querySelectorAll('.input')
-var userName=input[0].value
-var Password=input[1].value
-var EnsurePasswd=input[2].value
-if(userName.split('').length=='0'){
-    enrollVerify.innerText="请输入用户名"
-    enrollVerify.classList.add('show');
-}else if(userName.split('').length<3||userName.split('').length>=16){
-    enrollVerify.innerText="用户名长度为3-16字符"
-    enrollVerify.classList.add('show');
-}else if(Password.split('').length===0){
-    enrollVerify.innerText="请输入密码"
-    enrollVerify.classList.add('show');
-}else if(Password.split('').length<6||Password.split('').length>16){
-    enrollVerify.innerText="密码长度为6-16字符"
-    enrollVerify.classList.add('show');
-}else if(EnsurePasswd.split('').length===0){
-    enrollVerify.innerText="请确认密码"
-    enrollVerify.classList.add('show');
-}else if(EnsurePasswd!=Password){
-    enrollVerify.innerText="确认密码失败"
-    enrollVerify.classList.add('show');
-}else{
-    enrollVerify.innerText="注册成功"
-    enrollVerify.classList.add('show');
-    users.push({userName,Password})
-    closeLoginPage()
-    logged()
-    clearInput()
-    changeInformation(userName)
-}
+    var input=document.querySelectorAll('.input')
+    var userName=input[0].value
+    var Password=input[1].value
+    var EnsurePasswd=input[2].value
 
-if (enrollVerify.classList.contains('show')) {
-setTimeout(function() {
-    enrollVerify.classList.remove('show');
-}, 1000); 
-}
+    // 检查用户名是否为空
+    if(userName.split('').length=='0'){
+        enrollVerify.innerText="请输入用户名"
+        enrollVerify.classList.add('show');
+    }
+    // 检查用户名长度
+    else if(userName.split('').length<3||userName.split('').length>=16){
+        enrollVerify.innerText="用户名长度为3-16字符"
+        enrollVerify.classList.add('show');
+    }
+    // 检查用户名是否已存在
+    else if(users.some(user => user.userName === userName)){
+        enrollVerify.innerText="用户名已存在"
+        enrollVerify.classList.add('show');
+    }
+    // 检查密码是否为空
+    else if(Password.split('').length===0){
+        enrollVerify.innerText="请输入密码"
+        enrollVerify.classList.add('show');
+    }
+    // 检查密码长度
+    else if(Password.split('').length<6||Password.split('').length>16){
+        enrollVerify.innerText="密码长度为6-16字符"
+        enrollVerify.classList.add('show');
+    }
+    // 检查确认密码是否为空
+    else if(EnsurePasswd.split('').length===0){
+        enrollVerify.innerText="请确认密码"
+        enrollVerify.classList.add('show');
+    }
+    // 检查两次密码是否一致
+    else if(EnsurePasswd!=Password){
+        enrollVerify.innerText="确认密码失败"
+        enrollVerify.classList.add('show');
+    }
+    // 所有验证通过,注册成功
+    else{
+        enrollVerify.innerText="注册成功"
+        enrollVerify.classList.add('show');
+        users.push({
+            userName,
+            Password,
+            avatar: "./images/UserAvatar/UserAvatar.png"
+        })
+        closeLoginPage()
+        logged()
+        clearInput()
+        changeInformation(userName)
+        updateAvatars("./images/UserAvatar/UserAvatar.png")
+    }
 
-} )
+    if (enrollVerify.classList.contains('show')) {
+        setTimeout(function() {
+            enrollVerify.classList.remove('show');
+        }, 1000); 
+    }
+})
 //登录事件
 loginBotton.addEventListener('click',function(){
 var input=document.querySelectorAll('.input')
@@ -441,6 +465,7 @@ if(user){
     logged()
     clearInput()
     changeInformation(userName)
+    updateAvatars(user.avatar)
 }else{
     loginVerify.innerText="登录失败"
     loginVerify.classList.add('loginVerifyShow');
@@ -485,9 +510,11 @@ dropdownContent.style.display = 'none';
 //退出登录
 var SignOut=document.querySelector('.SignOut')
 SignOut.addEventListener('click',function(){
-dropdownContent.style.display = 'none';
-notLogged() 
-marketToHead()
+    dropdownContent.style.display = 'none';
+    notLogged() 
+    marketToHead()
+    // 恢复默认头像
+    updateAvatars("./images/UserAvatar/UserAvatar.png")
 })
 
 //获取商城元素
@@ -501,9 +528,12 @@ var commodityNames =document.querySelectorAll('.product-name')
 var commodityPrices =document.querySelectorAll('.product-price')
 var purchaseProduct =document.querySelector('.purchase-product')
 var purchaseShow =document.querySelector('.purchase-show')
+var ShowImg =document.querySelector('.purchase-show-img')
 var purchaseLens =document.querySelector('.purchase-lens')
+var LensImg =document.querySelector('.purchase-lens-img')
 var purchaseName =document.querySelector('.purchase-name')
 var purchasePrice =document.querySelector('.purchase-price')
+var mask=document.querySelector('.mask')
 //跳转到商城界面方法
 function headToMarket(){
     if (logedIndex===0){
@@ -542,45 +572,207 @@ for (let i=0;i<commodityImgs.length;i++){
     commodityPrices[i].innerText=`¥${productData[i].price}`
     product[i].addEventListener('click',function(){
         purchaseProduct.src=`${productData[i].img}`
-        purchaseShow.src=`${productData[i].img}`
+        ShowImg.src=`${productData[i].img}`
+        LensImg.src=`${productData[i].img}`
+        purchaseName.innerText=`${productData[i].productName+" "+productData[i].introduce}`
+        purchasePrice.innerText=`¥${productData[i].price}`
+        Topurchase()
+    })
+    infoAlink[i].addEventListener('click',function(){
+        purchaseProduct.src=`${productData[i].img}`
+        ShowImg.src=`${productData[i].img}`
+        LensImg.src=`${productData[i].img}`
         purchaseName.innerText=`${productData[i].productName+" "+productData[i].introduce}`
         purchasePrice.innerText=`¥${productData[i].price}`
         Topurchase()
     })
 }
 // 图片放大镜
-purchaseShow.addEventListener('mousemove', function(event) {
-    var imgRect = purchaseShow.getBoundingClientRect();
-    var x = event.clientX - imgRect.left;
-    var y = event.clientY - imgRect.top;
+purchaseShow.addEventListener('mouseover', function () {
+    mask.style.display = 'block';
+    purchaseLens.style.display = 'block';
+});
+
+purchaseShow.addEventListener('mouseout', function () {
+    mask.style.display = 'none';
+    purchaseLens.style.display = 'none';
+});
+
+purchaseShow.addEventListener('mousemove', function (e) {
+    // 获取鼠标相对于图片容器的位置
+    var rect = purchaseShow.getBoundingClientRect();
+    var x = e.clientX - rect.left;
+    var y = e.clientY - rect.top;
+
+    // 计算遮罩层位置
+    var maskX = x - mask.offsetWidth / 2;
+    var maskY = y - mask.offsetHeight / 2;
+
+    // 限制遮罩层移动范围
+    var maxX = purchaseShow.offsetWidth - mask.offsetWidth;
+    var maxY = purchaseShow.offsetHeight - mask.offsetHeight;
+
+    maskX = Math.min(Math.max(0, maskX), maxX);
+    maskY = Math.min(Math.max(0, maskY), maxY);
+
+    // 设置遮罩层位置
+    mask.style.left = maskX + 'px';
+    mask.style.top = maskY + 'px';
+
+    // 计算放大图片位置
+    // 放大倍数为2（因为放大图片尺寸是原图的2倍）
+    var scaleX = 2;
+    var scaleY = 2;
     
-    // 确保放大镜不会超出图片边界
-    if (x < 0 || x > imgRect.width || y < 0 || y > imgRect.height) {
-        purchaseLens.style.display = 'none';
+    // 计算大图移动距离
+    var bigX = (maskX * scaleX);
+    var bigY = (maskY * scaleY);
+
+    // 移动放大图片
+    LensImg.style.left = -bigX + 'px';
+    LensImg.style.top = -bigY + 'px';
+});
+
+// 获取账号设置相关元素
+const changeInfoModal = document.querySelector('.change-information');
+const modifyInfoBtn = document.querySelector('.Modify-information');
+const changeCloseBtn = document.querySelector('.change-x');
+const avatarUploadInput = document.getElementById('avatar-upload');
+const currentAvatar = document.querySelector('.current-avatar');
+const changeAvatarBtn = document.querySelector('.change-avatar-btn');
+const changeSubmitBtn = document.querySelector('.change-submit');
+
+// 打开账号设置弹窗
+modifyInfoBtn.addEventListener('click', function() {
+    changeInfoModal.style.display = 'block';
+    coverPage.style.display = 'block';
+    dropdownContent.style.display = 'none';
+});
+
+// 关闭账号设置弹窗
+changeCloseBtn.addEventListener('click', function() {
+    changeInfoModal.style.display = 'none';
+    coverPage.style.display = 'none';
+});
+
+// 更换头像功能
+changeAvatarBtn.addEventListener('click', function() {
+    avatarUploadInput.click();
+});
+
+avatarUploadInput.addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const newAvatarUrl = e.target.result;
+            // 更新所有显示头像的地方
+            updateAvatars(newAvatarUrl);
+            
+            // 保存到用户数据
+            const currentUser = dropdownUsername.innerText;
+            const userIndex = users.findIndex(u => u.userName === currentUser);
+            if (userIndex !== -1) {
+                users[userIndex].avatar = newAvatarUrl;
+                // 保存到 localStorage
+                storeUserArray('users', users);
+            }
+        };
+        reader.readAsDataURL(file);
+    }
+});
+
+// 保存修改
+changeSubmitBtn.addEventListener('click', function() {
+    const newUsername = document.getElementById('change-username').value;
+    const oldPassword = document.getElementById('old-password').value;
+    const newPassword = document.getElementById('new-password').value;
+    const confirmPassword = document.getElementById('confirm-password').value;
+    
+    // 获取当前登录用户
+    const currentUser = dropdownUsername.innerText;
+    const userIndex = users.findIndex(u => u.userName === currentUser);
+    
+    if (userIndex === -1) {
+        alert('用户未找到！');
         return;
     }
 
-    // 计算放大镜相对于图片的位置
-    var magnifierX = x - (purchaseLens.offsetWidth / 2);
-    var magnifierY = y - (purchaseLens.offsetHeight / 2);
+    // 验证原密码
+    if (oldPassword && oldPassword !== users[userIndex].Password) {
+        alert('原密码错误！');
+        return;
+    }
 
-    // 设置放大镜的位置
-    purchaseLens.style.left = magnifierX + 'px';
-    purchaseLens.style.top = magnifierY + 'px';
-    purchaseLens.style.display = 'block';
+    // 验证新密码
+    if (newPassword) {
+        if (newPassword.length < 6 || newPassword.length > 16) {
+            alert('新密码长度应为6-16个字符！');
+            return;
+        }
+        if (newPassword !== confirmPassword) {
+            alert('两次输入的密码不一致！');
+            return;
+        }
+    }
 
-    // 设置放大镜的背景图片
-    purchaseLens.style.backgroundImage = 'url(' + purchaseShow.src + ')';
+    // 验证新用户名
+    if (newUsername) {
+        if (newUsername.length < 3 || newUsername.length > 16) {
+            alert('用户名长度应为3-16个字符！');
+            return;
+        }
+        // 检查用户名是否已存在
+        if (users.some(u => u.userName === newUsername && u.userName !== currentUser)) {
+            alert('该用户名已存在！');
+            return;
+        }
+    }
 
-    // 设置背景图片的大小，这里假设放大镜显示的是图片的2倍大小
-    purchaseLens.style.backgroundSize = (purchaseShow.width * 2) + 'px ' + (purchaseShow.height * 2) + 'px';
+    // 更新用户信息
+    if (newUsername) {
+        users[userIndex].userName = newUsername;
+        dropdownUsername.innerText = newUsername;
+    }
+    if (newPassword) {
+        users[userIndex].Password = newPassword;
+    }
 
-    // 设置背景图片的位置，这里根据鼠标的位置来计算
-    purchaseLens.style.backgroundPosition = (-x * 2) + 'px ' + (-y * 2) + 'px';
+    // 保存到 localStorage
+    storeUserArray('users', users);
+    
+    alert('修改成功！');
+    changeInfoModal.style.display = 'none';
+    coverPage.style.display = 'none';
+    
+    // 清空输入框
+    document.getElementById('change-username').value = '';
+    document.getElementById('old-password').value = '';
+    document.getElementById('new-password').value = '';
+    document.getElementById('confirm-password').value = '';
 });
 
-purchaseShow.addEventListener('mouseout', function() {
-    purchaseLens.style.display = 'none';
+// 添加更新所有头像显示的函数
+function updateAvatars(avatarUrl) {
+    document.querySelector('.UserAvatar').src = avatarUrl;
+    document.querySelector('.dropdownAvatar').src = avatarUrl;
+    document.querySelector('.current-avatar').src = avatarUrl;
+}
+
+// 获取搜索框元素
+const searchForm = document.querySelector('.Searchbox');
+const searchInput = searchForm.querySelector('input[type="text"]');
+
+// 添加表单提交事件监听器
+searchForm.addEventListener('submit', function(e) {
+    e.preventDefault(); // 阻止表单默认提交行为
+    
+    const searchQuery = searchInput.value.trim();
+    if(searchQuery) {
+        // 构建必应搜索URL并跳转
+        const bingSearchUrl = `https://www.bing.com/search?q=${encodeURIComponent(searchQuery)}`;
+        window.open(bingSearchUrl, '_blank');
+    }
 });
 
 
