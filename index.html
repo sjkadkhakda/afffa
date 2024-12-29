@@ -7,8 +7,17 @@
     <link rel="stylesheet" href="./style.css">
 </head>
 <body>
-    <!-- 音频自动循环播放 -->
-    <audio src="./audioes/1401568647-1-192.mp3"></audio>
+    <div class="announcement">
+        <div class="announcement-content">
+            <h2>欢迎来到猪猪侠的世界!</h2>
+            <p>本网站有背景音乐,请注意调整音量</p>
+            <button class="announcement-btn">确定</button>
+        </div>
+    </div>
+    <!-- 添加音频元素 -->
+    <audio id="bgMusic" loop>
+        <source src="./audioes/1401568647-1-192 .mp3" type="audio/mpeg">
+    </audio>
     <div id="app">
         <!-- 登录界面 -->
          <!-- 遮罩 -->

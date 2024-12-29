@@ -517,263 +517,300 @@ SignOut.addEventListener('click',function(){
     updateAvatars("./images/UserAvatar/UserAvatar.png")
 })
 
-//获取商城元素
-var market=document.querySelector('.market')
-var indexPage=document.querySelector('.index')
-var productPage=document.querySelector('.product-page')
-var purchasePage=document.querySelector('.purchase')
-var product=document.querySelectorAll('.product')
-var commodityImgs =document.querySelectorAll('.product-img')
-var commodityNames =document.querySelectorAll('.product-name')
-var commodityPrices =document.querySelectorAll('.product-price')
-var purchaseProduct =document.querySelector('.purchase-product')
-var purchaseShow =document.querySelector('.purchase-show')
-var ShowImg =document.querySelector('.purchase-show-img')
-var purchaseLens =document.querySelector('.purchase-lens')
-var LensImg =document.querySelector('.purchase-lens-img')
-var purchaseName =document.querySelector('.purchase-name')
-var purchasePrice =document.querySelector('.purchase-price')
-var mask=document.querySelector('.mask')
-//跳转到商城界面方法
+// 获取商城相关DOM元素
+var market = document.querySelector('.market')
+var indexPage = document.querySelector('.index')
+var productPage = document.querySelector('.product-page')
+var purchasePage = document.querySelector('.purchase')
+var product = document.querySelectorAll('.product')
+var commodityImgs = document.querySelectorAll('.product-img')
+var commodityNames = document.querySelectorAll('.product-name')
+var commodityPrices = document.querySelectorAll('.product-price')
+var purchaseProduct = document.querySelector('.purchase-product')
+var purchaseShow = document.querySelector('.purchase-show')
+var ShowImg = document.querySelector('.purchase-show-img')
+var purchaseLens = document.querySelector('.purchase-lens')
+var LensImg = document.querySelector('.purchase-lens-img')
+var purchaseName = document.querySelector('.purchase-name')
+var purchasePrice = document.querySelector('.purchase-price')
+var mask = document.querySelector('.mask')
+
+// 跳转到商城界面
 function headToMarket(){
-    if (logedIndex===0){
+    // 未登录时显示登录框
+    if (logedIndex === 0){
         loginPage()
-    }else{
-    market.style.display='block'
-    indexPage.style.display='none'
-    menuItems[4].classList.add('active')
-    purchasePage.style.display='none'
-    productPage.style.display='flex'
+    } else {
+        market.style.display = 'block'
+        indexPage.style.display = 'none'
+        menuItems[4].classList.add('active')
+        purchasePage.style.display = 'none'
+        productPage.style.display = 'flex'
     }
 }
-//跳转到首页界面方法
+
+// 跳转回首页
 function marketToHead(){
-    market.style.display='none'
-    indexPage.style.display='block'
+    market.style.display = 'none'
+    indexPage.style.display = 'block'
     menuItems[4].classList.remove('active')
 }
-//跳转到购买页方法
+
+// 跳转到商品购买页
 function Topurchase(){
     headToMarket()
-    purchasePage.style.display='flex'
-    productPage.style.display='none'
+    purchasePage.style.display = 'flex'
+    productPage.style.display = 'none'
 }
-//添加跳转事件
-for(let i=0;i<4;i++){
-        menuItems[i].addEventListener('click',marketToHead)
+
+// 添加导航菜单跳转事件
+for(let i = 0; i < 4; i++){
+    menuItems[i].addEventListener('click', marketToHead)
 }
-//给猪猪商城和产品库都添加上跳转事件
-menuItems[4].addEventListener('click',headToMarket)
-//商品购买界面信息上传
-//上传商城商品信息
-for (let i=0;i<commodityImgs.length;i++){
-    commodityImgs[i].src=`${productData[i].img}`
-    commodityNames[i].innerText=`${productData[i].productName+" "+productData[i].introduce}`
-    commodityPrices[i].innerText=`¥${productData[i].price}`
-    product[i].addEventListener('click',function(){
-        purchaseProduct.src=`${productData[i].img}`
-        ShowImg.src=`${productData[i].img}`
-        LensImg.src=`${productData[i].img}`
-        purchaseName.innerText=`${productData[i].productName+" "+productData[i].introduce}`
-        purchasePrice.innerText=`¥${productData[i].price}`
+menuItems[4].addEventListener('click', headToMarket)
+
+// 更新商城商品展示
+for (let i = 0; i < commodityImgs.length; i++){
+    // 设置商品图片、名称和价格
+    commodityImgs[i].src = `${productData[i].img}`
+    commodityNames[i].innerText = `${productData[i].productName} ${productData[i].introduce}`
+    commodityPrices[i].innerText = `¥${productData[i].price}`
+    
+    // 点击商品跳转到购买页
+    product[i].addEventListener('click', function(){
+        purchaseProduct.src = `${productData[i].img}`
+        ShowImg.src = `${productData[i].img}`
+        LensImg.src = `${productData[i].img}`
+        purchaseName.innerText = `${productData[i].productName} ${productData[i].introduce}`
+        purchasePrice.innerText = `¥${productData[i].price}`
         Topurchase()
     })
-    infoAlink[i].addEventListener('click',function(){
-        purchaseProduct.src=`${productData[i].img}`
-        ShowImg.src=`${productData[i].img}`
-        LensImg.src=`${productData[i].img}`
-        purchaseName.innerText=`${productData[i].productName+" "+productData[i].introduce}`
-        purchasePrice.innerText=`¥${productData[i].price}`
+    
+    // 点击详情链接跳转到购买页
+    infoAlink[i].addEventListener('click', function(){
+        purchaseProduct.src = `${productData[i].img}`
+        ShowImg.src = `${productData[i].img}`
+        LensImg.src = `${productData[i].img}`
+        purchaseName.innerText = `${productData[i].productName} ${productData[i].introduce}`
+        purchasePrice.innerText = `¥${productData[i].price}`
         Topurchase()
     })
 }
-// 图片放大镜
+
+// 商品图片放大镜效果
 purchaseShow.addEventListener('mouseover', function () {
-    mask.style.display = 'block';
-    purchaseLens.style.display = 'block';
-});
+    mask.style.display = 'block'
+    purchaseLens.style.display = 'block'
+})
 
 purchaseShow.addEventListener('mouseout', function () {
-    mask.style.display = 'none';
-    purchaseLens.style.display = 'none';
-});
+    mask.style.display = 'none'
+    purchaseLens.style.display = 'none'
+})
 
+// 放大镜跟随鼠标移动效果
 purchaseShow.addEventListener('mousemove', function (e) {
     // 获取鼠标相对于图片容器的位置
-    var rect = purchaseShow.getBoundingClientRect();
-    var x = e.clientX - rect.left;
-    var y = e.clientY - rect.top;
+    var rect = purchaseShow.getBoundingClientRect()
+    var x = e.clientX - rect.left
+    var y = e.clientY - rect.top
 
     // 计算遮罩层位置
-    var maskX = x - mask.offsetWidth / 2;
-    var maskY = y - mask.offsetHeight / 2;
+    var maskX = x - mask.offsetWidth / 2
+    var maskY = y - mask.offsetHeight / 2
 
     // 限制遮罩层移动范围
-    var maxX = purchaseShow.offsetWidth - mask.offsetWidth;
-    var maxY = purchaseShow.offsetHeight - mask.offsetHeight;
+    var maxX = purchaseShow.offsetWidth - mask.offsetWidth
+    var maxY = purchaseShow.offsetHeight - mask.offsetHeight
 
-    maskX = Math.min(Math.max(0, maskX), maxX);
-    maskY = Math.min(Math.max(0, maskY), maxY);
+    maskX = Math.min(Math.max(0, maskX), maxX)
+    maskY = Math.min(Math.max(0, maskY), maxY)
 
     // 设置遮罩层位置
-    mask.style.left = maskX + 'px';
-    mask.style.top = maskY + 'px';
+    mask.style.left = maskX + 'px'
+    mask.style.top = maskY + 'px'
 
     // 计算放大图片位置
-    // 放大倍数为2（因为放大图片尺寸是原图的2倍）
-    var scaleX = 2;
-    var scaleY = 2;
+    var scaleX = 2 // 放大倍数
+    var scaleY = 2
     
     // 计算大图移动距离
-    var bigX = (maskX * scaleX);
-    var bigY = (maskY * scaleY);
+    var bigX = (maskX * scaleX)
+    var bigY = (maskY * scaleY)
 
     // 移动放大图片
-    LensImg.style.left = -bigX + 'px';
-    LensImg.style.top = -bigY + 'px';
-});
+    LensImg.style.left = -bigX + 'px'
+    LensImg.style.top = -bigY + 'px'
+})
 
 // 获取账号设置相关元素
-const changeInfoModal = document.querySelector('.change-information');
-const modifyInfoBtn = document.querySelector('.Modify-information');
-const changeCloseBtn = document.querySelector('.change-x');
-const avatarUploadInput = document.getElementById('avatar-upload');
-const currentAvatar = document.querySelector('.current-avatar');
-const changeAvatarBtn = document.querySelector('.change-avatar-btn');
-const changeSubmitBtn = document.querySelector('.change-submit');
+const changeInfoModal = document.querySelector('.change-information')
+const modifyInfoBtn = document.querySelector('.Modify-information')
+const changeCloseBtn = document.querySelector('.change-x')
+const avatarUploadInput = document.getElementById('avatar-upload')
+const currentAvatar = document.querySelector('.current-avatar')
+const changeAvatarBtn = document.querySelector('.change-avatar-btn')
+const changeSubmitBtn = document.querySelector('.change-submit')
 
 // 打开账号设置弹窗
 modifyInfoBtn.addEventListener('click', function() {
-    changeInfoModal.style.display = 'block';
-    coverPage.style.display = 'block';
-    dropdownContent.style.display = 'none';
-});
+    changeInfoModal.style.display = 'block'
+    coverPage.style.display = 'block'
+    document.body.style.overflow = 'hidden'
+    dropdownContent.style.display = 'none'
+})
 
 // 关闭账号设置弹窗
 changeCloseBtn.addEventListener('click', function() {
-    changeInfoModal.style.display = 'none';
-    coverPage.style.display = 'none';
-});
+    changeInfoModal.style.display = 'none'
+    coverPage.style.display = 'none'
+    document.body.style.overflow = 'auto'
+})
 
 // 更换头像功能
 changeAvatarBtn.addEventListener('click', function() {
-    avatarUploadInput.click();
-});
+    avatarUploadInput.click()
+})
 
+// 处理头像上传
 avatarUploadInput.addEventListener('change', function(e) {
-    const file = e.target.files[0];
+    const file = e.target.files[0]
     if (file) {
-        const reader = new FileReader();
+        const reader = new FileReader()
         reader.onload = function(e) {
-            const newAvatarUrl = e.target.result;
+            const newAvatarUrl = e.target.result
             // 更新所有显示头像的地方
-            updateAvatars(newAvatarUrl);
+            updateAvatars(newAvatarUrl)
             
             // 保存到用户数据
-            const currentUser = dropdownUsername.innerText;
-            const userIndex = users.findIndex(u => u.userName === currentUser);
+            const currentUser = dropdownUsername.innerText
+            const userIndex = users.findIndex(u => u.userName === currentUser)
             if (userIndex !== -1) {
-                users[userIndex].avatar = newAvatarUrl;
-                // 保存到 localStorage
-                storeUserArray('users', users);
+                users[userIndex].avatar = newAvatarUrl
+                storeUserArray('users', users)
             }
-        };
-        reader.readAsDataURL(file);
+        }
+        reader.readAsDataURL(file)
     }
-});
+})
 
-// 保存修改
+// 保存账号设置修改
 changeSubmitBtn.addEventListener('click', function() {
-    const newUsername = document.getElementById('change-username').value;
-    const oldPassword = document.getElementById('old-password').value;
-    const newPassword = document.getElementById('new-password').value;
-    const confirmPassword = document.getElementById('confirm-password').value;
+    const newUsername = document.getElementById('change-username').value
+    const oldPassword = document.getElementById('old-password').value
+    const newPassword = document.getElementById('new-password').value
+    const confirmPassword = document.getElementById('confirm-password').value
     
     // 获取当前登录用户
-    const currentUser = dropdownUsername.innerText;
-    const userIndex = users.findIndex(u => u.userName === currentUser);
+    const currentUser = dropdownUsername.innerText
+    const userIndex = users.findIndex(u => u.userName === currentUser)
     
     if (userIndex === -1) {
-        alert('用户未找到！');
-        return;
+        alert('用户未找到！')
+        return
     }
 
     // 验证原密码
     if (oldPassword && oldPassword !== users[userIndex].Password) {
-        alert('原密码错误！');
-        return;
+        alert('原密码错误！')
+        return
     }
 
     // 验证新密码
     if (newPassword) {
         if (newPassword.length < 6 || newPassword.length > 16) {
-            alert('新密码长度应为6-16个字符！');
-            return;
+            alert('新密码长度应为6-16个字符！')
+            return
         }
         if (newPassword !== confirmPassword) {
-            alert('两次输入的密码不一致！');
-            return;
+            alert('两次输入的密码不一致！')
+            return
         }
     }
 
     // 验证新用户名
     if (newUsername) {
         if (newUsername.length < 3 || newUsername.length > 16) {
-            alert('用户名长度应为3-16个字符！');
-            return;
+            alert('用户名长度应为3-16个字符！')
+            return
         }
-        // 检查用户名是否已存在
         if (users.some(u => u.userName === newUsername && u.userName !== currentUser)) {
-            alert('该用户名已存在！');
-            return;
+            alert('该用户名已存在！')
+            return
         }
     }
 
     // 更新用户信息
     if (newUsername) {
-        users[userIndex].userName = newUsername;
-        dropdownUsername.innerText = newUsername;
+        users[userIndex].userName = newUsername
+        dropdownUsername.innerText = newUsername
     }
     if (newPassword) {
-        users[userIndex].Password = newPassword;
+        users[userIndex].Password = newPassword
     }
 
     // 保存到 localStorage
-    storeUserArray('users', users);
+    storeUserArray('users', users)
     
-    alert('修改成功！');
-    changeInfoModal.style.display = 'none';
-    coverPage.style.display = 'none';
+    alert('修改成功！')
+    changeInfoModal.style.display = 'none'
+    coverPage.style.display = 'none'
     
     // 清空输入框
-    document.getElementById('change-username').value = '';
-    document.getElementById('old-password').value = '';
-    document.getElementById('new-password').value = '';
-    document.getElementById('confirm-password').value = '';
-});
+    document.getElementById('change-username').value = ''
+    document.getElementById('old-password').value = ''
+    document.getElementById('new-password').value = ''
+    document.getElementById('confirm-password').value = ''
+})
 
-// 添加更新所有头像显示的函数
+// 更新头像显示的函数
 function updateAvatars(avatarUrl) {
-    document.querySelector('.UserAvatar').src = avatarUrl;
-    document.querySelector('.dropdownAvatar').src = avatarUrl;
-    document.querySelector('.current-avatar').src = avatarUrl;
+    document.querySelector('.UserAvatar').src = avatarUrl
+    document.querySelector('.dropdownAvatar').src = avatarUrl
+    document.querySelector('.current-avatar').src = avatarUrl
 }
 
 // 获取搜索框元素
-const searchForm = document.querySelector('.Searchbox');
-const searchInput = searchForm.querySelector('input[type="text"]');
+const searchForm = document.querySelector('.Searchbox')
+const searchInput = searchForm.querySelector('input[type="text"]')
 
-// 添加表单提交事件监听器
+// 添加搜索表单提交事件监听器
 searchForm.addEventListener('submit', function(e) {
-    e.preventDefault(); // 阻止表单默认提交行为
+    e.preventDefault() // 阻止表单默认提交行为
     
-    const searchQuery = searchInput.value.trim();
+    const searchQuery = searchInput.value.trim()
     if(searchQuery) {
         // 构建必应搜索URL并跳转
-        const bingSearchUrl = `https://www.bing.com/search?q=${encodeURIComponent(searchQuery)}`;
-        window.open(bingSearchUrl, '_blank');
+        const bingSearchUrl = `https://www.bing.com/search?q=${encodeURIComponent(searchQuery)}`
+        window.open(bingSearchUrl, '_blank')
     }
-});
+})
+
+// 获取通告栏和音频元素
+const announcement = document.querySelector('.announcement')
+const announcementBtn = document.querySelector('.announcement-btn')
+const bgMusic = document.getElementById('bgMusic')
+
+// 页面加载时显示通知栏和遮罩
+window.addEventListener('load', function() {
+    announcement.style.display = 'flex'
+    coverPage.style.display = 'block'
+    document.body.style.overflow = 'hidden' // 禁止滚动
+})
+
+// 点击确定按钮时关闭通告栏并播放音乐
+announcementBtn.addEventListener('click', function() {
+    announcement.style.display = 'none'
+    coverPage.style.display = 'none'
+    document.body.style.overflow = 'auto' // 恢复滚动
+    // 尝试播放音频
+    bgMusic.play().catch(function(error) {
+        console.log("音频播放失败:", error)
+    })
+})
+
+// 设置音频音量
+bgMusic.volume = 0.5 // 设置音量为50%
 
 
 
