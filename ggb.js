@@ -61,7 +61,7 @@ function stopNext(){
 displayHero.addEventListener('mouseleave',startNext)
 displayHero.addEventListener('mouseenter',stopNext)
 //结束时间
-const end =new Date('2025-01-28T00:00:00').getTime();
+const end =new Date('2026-02-17T00:00:00').getTime();
 //倒计时更新函数
 function updateCountdown(){
     const now=new Date().getTime()
@@ -811,6 +811,7 @@ announcementBtn.addEventListener('click', function() {
 
 // 设置音频音量
 bgMusic.volume = 0.5 // 设置音量为50%
+
 
 
 
