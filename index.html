@@ -3,13 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>猪猪侠 GG Bond · 英雄展示与产品库</title>
-<meta name="description" content="猪猪侠（GG Bond）主题展示站：英雄档案、神器产品库、新春倒计时与猪猪商城。">
+<title>猪猪侠 GG Bond · 英雄档案、系列年表与珍藏馆</title>
+<meta name="description" content="猪猪侠（GG Bond）主题展示站：五位英雄档案、角色档案、十七季系列年表、名曲馆、官方数据荣誉墙、神器产品库、新春倒计时与猪猪商城。">
 <meta name="theme-color" content="#0b0d12">
-<meta property="og:title" content="猪猪侠 GG Bond · 英雄展示与产品库">
-<meta property="og:description" content="英雄档案、神器产品库、新春倒计时与猪猪商城。">
+<meta property="og:title" content="猪猪侠 GG Bond · 英雄档案、系列年表与珍藏馆">
+<meta property="og:description" content="英雄档案、角色档案、十七季系列年表、名曲馆、官方数据荣誉墙与猪猪商城。">
 <link rel="icon" href="./images/猪猪侠.jpg">
-<link rel="stylesheet" href="./style.css?v=2">
+<link rel="stylesheet" href="./style.css?v=3">
 <script>
 /* 没有 JS 时页面内容依然完整可见；这里只为「滚动出现」动效做准备，
    若脚本未成功加载，2 秒后自动取消隐藏，保证任何情况下都能看到内容。 */
@@ -36,8 +36,11 @@ if ('IntersectionObserver' in window) {
         <nav class="nav__links" id="navLinks" aria-label="主导航">
             <a href="#hero">首页</a>
             <a href="#heroes">英雄展示</a>
-            <a href="#products">产品库</a>
-            <a href="#festival">新春快乐</a>
+            <a href="#profiles">角色档案</a>
+            <a href="#timeline">系列年表</a>
+            <a href="#songs">名曲馆</a>
+            <a href="#honours">荣誉墙</a>
+            <a href="#quiz">趣味问答</a>
             <a href="#shop">猪猪商城</a>
         </nav>
         <button class="nav__toggle" id="navToggle" type="button"
@@ -70,11 +73,12 @@ if ('IntersectionObserver' in window) {
                 </p>
                 <div class="hero__actions">
                     <a class="btn btn--primary" href="#heroes">查看英雄档案</a>
-                    <a class="btn btn--ghost" href="#festival">新春倒计时</a>
+                    <a class="btn btn--ghost" href="#timeline">十七季系列年表</a>
                 </div>
                 <ul class="hero__stats">
-                    <li><strong>5</strong><span>位英雄</span></li>
-                    <li><strong>3</strong><span>件神器</span></li>
+                    <li><strong>17</strong><span>季动画</span></li>
+                    <li><strong>1,532</strong><span>集故事</span></li>
+                    <li><strong>11</strong><span>部大电影</span></li>
                     <li><strong id="heroDays">--</strong><span>天到春节</span></li>
                 </ul>
             </div>
@@ -150,6 +154,515 @@ if ('IntersectionObserver' in window) {
         </div>
     </section>
 
+    <!-- ============ 角色档案 ============ -->
+    <section class="section section--profiles" id="profiles">
+        <div class="wrap">
+            <header class="section-head" data-reveal>
+                <p class="eyebrow"><span class="eyebrow__dot"></span>CHARACTER FILES</p>
+                <h2 class="section-title">角色档案</h2>
+                <p class="section-sub">
+                    六位常驻角色的身份、关系和冷知识。资料整理自维基百科《猪猪侠》条目与广东咏声动漫官方介绍。
+                </p>
+            </header>
+
+            <div class="files">
+                <article class="file-card" data-reveal style="--accent:#ff2d2d">
+                    <header class="file-card__top">
+                        <span class="file-card__avatar" aria-hidden="true">猪</span>
+                        <div class="file-card__id">
+                            <h3>猪猪侠</h3>
+                            <p>GG Bond · 系列主角</p>
+                        </div>
+                        <span class="file-card__tag">英雄</span>
+                    </header>
+                    <dl class="file-card__list">
+                        <div><dt>身份</dt><dd>永远冲在最前面的那一个</dd></div>
+                        <div><dt>战绩</dt><dd>第三季里，每次比赛都会战胜超人强和波比</dd></div>
+                        <div><dt>高光</dt><dd>第四季里曾化身天使，帮助大傻怪</dd></div>
+                        <div><dt>关系</dt><dd>菲菲叫他「小猪猪」；与超人强小时候曾是朋友</dd></div>
+                    </dl>
+                    <p class="file-card__trivia"><span>冷知识</span>英文名「GG Bond」里的 GG，来自粤语「猪」的发音。</p>
+                </article>
+
+                <article class="file-card" data-reveal style="--accent:#ca6060">
+                    <header class="file-card__top">
+                        <span class="file-card__avatar" aria-hidden="true">菲</span>
+                        <div class="file-card__id">
+                            <h3>菲菲</h3>
+                            <p>温柔而坚定的伙伴</p>
+                        </div>
+                        <span class="file-card__tag">伙伴</span>
+                    </header>
+                    <dl class="file-card__list">
+                        <div><dt>身份</dt><dd>阿托士的女儿</dd></div>
+                        <div><dt>心事</dt><dd>她很喜歡豬豬俠</dd></div>
+                        <div><dt>称呼</dt><dd>会叫猪猪侠「小猪猪」</dd></div>
+                        <div><dt>舞台</dt><dd>舞台剧《天使奇遇记》的女主角</dd></div>
+                    </dl>
+                    <p class="file-card__trivia"><span>冷知识</span>《天使奇遇记》里她因遭女巫嫉妒被夺去美丽，在猪猪侠帮助下找回美丽，成为人们心目中的爱心天使。</p>
+                </article>
+
+                <article class="file-card" data-reveal style="--accent:#1fef04">
+                    <header class="file-card__top">
+                        <span class="file-card__avatar" aria-hidden="true">呆</span>
+                        <div class="file-card__id">
+                            <h3>小呆呆</h3>
+                            <p>憨厚可爱的最佳伙伴</p>
+                        </div>
+                        <span class="file-card__tag">天才</span>
+                    </header>
+                    <dl class="file-card__list">
+                        <div><dt>身份</dt><dd>猪大常和猪小妹的儿子</dd></div>
+                        <div><dt>从前</dt><dd>原本是一个天才儿童</dd></div>
+                        <div><dt>转折</dt><dd>第二季里因长期食用假冒伪劣的超级棒棒糖而变得痴呆</dd></div>
+                        <div><dt>同台</dt><dd>舞台剧《仙豆传奇》里一起前往巨人城堡</dd></div>
+                    </dl>
+                    <p class="file-card__trivia"><span>冷知识</span>他的「呆」，是被假货坑出来的——所以买棒棒糖一定要认准超级棒棒糖。</p>
+                </article>
+
+                <article class="file-card" data-reveal style="--accent:#0462ef">
+                    <header class="file-card__top">
+                        <span class="file-card__avatar" aria-hidden="true">强</span>
+                        <div class="file-card__id">
+                            <h3>超人强</h3>
+                            <p>骄傲自满的富家小少爷</p>
+                        </div>
+                        <span class="file-card__tag">对手</span>
+                    </header>
+                    <dl class="file-card__list">
+                        <div><dt>身份</dt><dd>强强科技小学校董的儿子</dd></div>
+                        <div><dt>从前</dt><dd>小时候曾是猪猪侠的朋友</dd></div>
+                        <div><dt>现在</dt><dd>自恃家境富裕、骄傲自满、经常盛气凌人，是猪猪侠的死对头</dd></div>
+                        <div><dt>出场</dt><dd>第四、五季里以坏学生的形象出现</dd></div>
+                    </dl>
+                    <p class="file-card__trivia"><span>冷知识</span>他的「小跟班」波比，是专门负责给他拍马屁的。</p>
+                </article>
+
+                <article class="file-card" data-reveal style="--accent:#25cece">
+                    <header class="file-card__top">
+                        <span class="file-card__avatar" aria-hidden="true">比</span>
+                        <div class="file-card__id">
+                            <h3>波比</h3>
+                            <p>超人强的小跟班</p>
+                        </div>
+                        <span class="file-card__tag">跟班</span>
+                    </header>
+                    <dl class="file-card__list">
+                        <div><dt>身份</dt><dd>以讨好超人强为己任</dd></div>
+                        <div><dt>特长</dt><dd>拍马屁</dd></div>
+                        <div><dt>短板</dt><dd>常常不分场合，经常拍错马屁</dd></div>
+                        <div><dt>战绩</dt><dd>第三季的比赛里总是输给猪猪侠</dd></div>
+                    </dl>
+                    <p class="file-card__trivia"><span>冷知识</span>在超星五灵侠系列里，他也成长为能独当一面的超星特工。</p>
+                </article>
+
+                <article class="file-card" data-reveal style="--accent:#f5c451">
+                    <header class="file-card__top">
+                        <span class="file-card__avatar" aria-hidden="true">师</span>
+                        <div class="file-card__id">
+                            <h3>迷糊老师</h3>
+                            <p>猪猪侠的技术后援</p>
+                        </div>
+                        <span class="file-card__tag">导师</span>
+                    </header>
+                    <dl class="file-card__list">
+                        <div><dt>身份</dt><dd>第二、三季里，比赛前给猪猪侠超级棒棒糖补充体力</dd></div>
+                        <div><dt>改名</dt><dd>从第十三季开始被叫作「迷糊博士」</dd></div>
+                        <div><dt>带队</dt><dd>在超星萌宠系列里指导猪猪侠成为合格的星际特工</dd></div>
+                        <div><dt>宠物</dt><dd>与铁拳虎、超星核有关的星际装备都出自他的研究</dd></div>
+                    </dl>
+                    <p class="file-card__trivia"><span>冷知识</span>从「老师」到「博士」，他跟着猪猪侠一路从童话世界走到了九霄星。</p>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ 系列年表 ============ -->
+    <section class="section section--timeline" id="timeline">
+        <div class="wrap">
+            <header class="section-head" data-reveal>
+                <p class="eyebrow"><span class="eyebrow__dot"></span>SERIES CHRONICLE</p>
+                <h2 class="section-title">系列年表</h2>
+                <p class="section-sub">
+                    自 2005 年开始创作、2006 年首播，十七季电视动画、三套番外、十一部大电影与四部舞台剧。
+                </p>
+            </header>
+
+            <ul class="series-stats" data-reveal>
+                <li><strong>17</strong><span>季电视动画</span></li>
+                <li><strong>1,532</strong><span>集（各季集数合计）</span></li>
+                <li><strong>11</strong><span>部大电影</span></li>
+                <li><strong>4</strong><span>部舞台剧</span></li>
+                <li><strong>20</strong><span>年陪伴（2006 起）</span></li>
+            </ul>
+
+            <div class="covers" data-reveal>
+                <figure class="cover">
+                    <img src="./images/cover_s11_guangming.jpg" alt="《猪猪侠之光明守卫者》封面" width="560" height="747" loading="lazy" decoding="async">
+                    <figcaption><strong>光明守卫者</strong><span>第 11 季 · 2016 · 52 集</span></figcaption>
+                </figure>
+                <figure class="cover">
+                    <img src="./images/cover_s12_mengxiang.jpg" alt="《猪猪侠之梦想守卫者》封面" width="560" height="747" loading="lazy" decoding="async">
+                    <figcaption><strong>梦想守卫者</strong><span>第 12 季 · 2016 · 52 集</span></figcaption>
+                </figure>
+                <figure class="cover">
+                    <img src="./images/cover_s13_chaoxing.jpg" alt="《猪猪侠之超星萌宠》封面" width="560" height="747" loading="lazy" decoding="async">
+                    <figcaption><strong>超星萌宠 3</strong><span>第 13 季系列 · 2017 · 36 集</span></figcaption>
+                </figure>
+                <figure class="cover">
+                    <img src="./images/cover_s14_jingqiu.jpg" alt="《猪猪侠之竞球小英雄》封面" width="560" height="747" loading="lazy" decoding="async">
+                    <figcaption><strong>竞球小英雄 1</strong><span>第 14 季系列 · 2018 · 26 集</span></figcaption>
+                </figure>
+                <figure class="cover">
+                    <img src="./images/cover_s15_jingsu.jpg" alt="《猪猪侠之竞速小英雄》封面" width="560" height="747" loading="lazy" decoding="async">
+                    <figcaption><strong>竞速小英雄 1</strong><span>第 15 季系列 · 2019 · 26 集</span></figcaption>
+                </figure>
+                <figure class="cover">
+                    <img src="./images/cover_s16_shenhai.jpg" alt="《猪猪侠之深海小英雄》封面" width="560" height="747" loading="lazy" decoding="async">
+                    <figcaption><strong>深海小英雄</strong><span>第 16 季 · 2020 · 104 集</span></figcaption>
+                </figure>
+                <figure class="cover">
+                    <img src="./images/cover_s17_wulingxia.jpg" alt="《猪猪侠之超星五灵侠》封面" width="560" height="747" loading="lazy" decoding="async">
+                    <figcaption><strong>超星五灵侠 1</strong><span>第 17 季 · 2021 · 26 集</span></figcaption>
+                </figure>
+                <figure class="cover">
+                    <img src="./images/cover_sp_konglong.jpg" alt="《猪猪侠之恐龙日记》封面" width="560" height="747" loading="lazy" decoding="async">
+                    <figcaption><strong>恐龙日记 第 8 季</strong><span>番外篇 · 全 26 集</span></figcaption>
+                </figure>
+            </div>
+
+            <div class="chronicle" data-reveal>
+                <div class="tabs" role="tablist" aria-label="年表筛选">
+                    <button class="tab is-active" type="button" data-filter="season" role="tab" aria-selected="true">电视动画</button>
+                    <button class="tab" type="button" data-filter="sp" role="tab" aria-selected="false">番外篇</button>
+                    <button class="tab" type="button" data-filter="movie" role="tab" aria-selected="false">大电影</button>
+                    <button class="tab" type="button" data-filter="stage" role="tab" aria-selected="false">舞台剧</button>
+                </div>
+
+                <ol class="tl" id="timelineList">
+                    <li class="tl__item" data-kind="season">
+                        <span class="tl__year">2006</span>
+                        <div class="tl__body">
+                            <h3>第一季 · 魔幻猪猡纪</h3>
+                            <p>系列起点，全 20 集。猪猪侠和他的伙伴们第一次和观众见面。</p>
+                        </div>
+                        <span class="tl__eps">20 集</span>
+                    </li>
+                    <li class="tl__item" data-kind="season">
+                        <span class="tl__year">2007</span>
+                        <div class="tl__body">
+                            <h3>第二季 · 武侠2008</h3>
+                            <p>迷糊老师在比赛前给猪猪侠超级棒棒糖补充体力；小呆呆因假冒伪劣棒棒糖而变得痴呆。</p>
+                        </div>
+                        <span class="tl__eps">20 集</span>
+                    </li>
+                    <li class="tl__item" data-kind="season">
+                        <span class="tl__year">2008</span>
+                        <div class="tl__body">
+                            <h3>第三季 · 勇闯未来之城</h3>
+                            <p>小猪们的赛场时代：这一季里，猪猪侠每次比赛都会战胜超人强和波比。</p>
+                        </div>
+                        <span class="tl__eps">40 集</span>
+                    </li>
+                    <li class="tl__item" data-kind="season">
+                        <span class="tl__year">2009</span>
+                        <div class="tl__body">
+                            <h3>第四季 · 百变猪猪侠</h3>
+                            <p>集数最多的一季，全 80 集、每集 10 分钟。猪猪侠化身天使帮助大傻怪，也是从这里被叫「小猪猪」。</p>
+                        </div>
+                        <span class="tl__eps">80 集</span>
+                    </li>
+                    <li class="tl__item" data-kind="season">
+                        <span class="tl__year">2010</span>
+                        <div class="tl__body">
+                            <h3>第五季 · 积木世界的童话故事</h3>
+                            <p>片头曲从这里换成《小英雄大肚腩》，成了很多人的童年记忆。</p>
+                        </div>
+                        <span class="tl__eps">52 集</span>
+                    </li>
+                    <li class="tl__item" data-kind="season">
+                        <span class="tl__year">2012</span>
+                        <div class="tl__body">
+                            <h3>第六季 · 幸福救援队</h3>
+                            <p>救援主题的一季，猪猪侠和小伙伴们开始承担更大的责任。</p>
+                        </div>
+                        <span class="tl__eps">52 集</span>
+                    </li>
+                    <li class="tl__item" data-kind="season">
+                        <span class="tl__year">2013</span>
+                        <div class="tl__body">
+                            <h3>第七季 · 变身小英雄</h3>
+                            <p>「变身」设定的开端，后来被改编成同名舞台剧。</p>
+                        </div>
+                        <span class="tl__eps">52 集</span>
+                    </li>
+                    <li class="tl__item" data-kind="season">
+                        <span class="tl__year">2014</span>
+                        <div class="tl__body">
+                            <h3>第八季 · 变身战队</h3>
+                            <p>获评 2015 年度优秀电视动画；片尾曲从这一季起换成《超级棒棒糖》。</p>
+                        </div>
+                        <span class="tl__eps">52 集</span>
+                    </li>
+                    <li class="tl__item" data-kind="season">
+                        <span class="tl__year">2015</span>
+                        <div class="tl__body">
+                            <h3>第九季 · 百变联盟</h3>
+                            <p>联盟集结，为随后五灵系列的世界观打下基础。</p>
+                        </div>
+                        <span class="tl__eps">52 集</span>
+                    </li>
+                    <li class="tl__item" data-kind="season">
+                        <span class="tl__year">2015</span>
+                        <div class="tl__body">
+                            <h3>特别篇 · 终极决战前夜篇</h3>
+                            <p>大电影《猪猪侠之终极决战》的预热作品，内容大致为第七季至第九季的合集。</p>
+                        </div>
+                        <span class="tl__eps">52 集</span>
+                    </li>
+                    <li class="tl__item" data-kind="season">
+                        <span class="tl__year">2015</span>
+                        <div class="tl__body">
+                            <h3>第十季 · 五灵守卫者</h3>
+                            <p>五灵世界正式登场，获评 2016 年度优秀国产动画——五灵锁的故事就从这里开始。</p>
+                        </div>
+                        <span class="tl__eps">52 集</span>
+                    </li>
+                    <li class="tl__item" data-kind="season">
+                        <span class="tl__year">2016</span>
+                        <div class="tl__body">
+                            <h3>第十一季 · 光明守卫者</h3>
+                            <p>水晶城之外被封印的双子城，与一片能复制出邪恶双生子的垂直双子湖。</p>
+                        </div>
+                        <span class="tl__eps">52 集</span>
+                    </li>
+                    <li class="tl__item" data-kind="season">
+                        <span class="tl__year">2016</span>
+                        <div class="tl__body">
+                            <h3>第十二季 · 梦想守卫者</h3>
+                            <p>遗忘战士开始最后的计划——寻找失落在童话世界各地的五块五灵碎片。</p>
+                        </div>
+                        <span class="tl__eps">52 集</span>
+                    </li>
+                    <li class="tl__item" data-kind="season">
+                        <span class="tl__year">2017</span>
+                        <div class="tl__body">
+                            <h3>第十三季 · 超星萌宠</h3>
+                            <p>全 124 集。迷糊博士带着猪猪侠与奇异的外星人打交道，铁拳虎登场，猪猪侠逐渐成为合格的星际特工。</p>
+                        </div>
+                        <span class="tl__eps">124 集</span>
+                    </li>
+                    <li class="tl__item" data-kind="season">
+                        <span class="tl__year">2018</span>
+                        <div class="tl__body">
+                            <h3>第十四季 · 竞球小英雄</h3>
+                            <p>全 104 集的热血赛场，是哔哩哔哩番剧库里评分最高的猪猪侠系列之一。</p>
+                        </div>
+                        <span class="tl__eps">104 集</span>
+                    </li>
+                    <li class="tl__item" data-kind="season">
+                        <span class="tl__year">2019</span>
+                        <div class="tl__body">
+                            <h3>第十五季 · 竞速小英雄（1-4）</h3>
+                            <p>主角是超星特工们，剧情围绕对抗星盗组织展开。</p>
+                        </div>
+                        <span class="tl__eps">104 集</span>
+                    </li>
+                    <li class="tl__item" data-kind="season">
+                        <span class="tl__year">2020</span>
+                        <div class="tl__body">
+                            <h3>第十六季 · 深海小英雄</h3>
+                            <p>全 104 集，把冒险的舞台搬到了海底。</p>
+                        </div>
+                        <span class="tl__eps">104 集</span>
+                    </li>
+                    <li class="tl__item" data-kind="season">
+                        <span class="tl__year">2021-2023</span>
+                        <div class="tl__body">
+                            <h3>第十七季 · 超星五灵侠</h3>
+                            <p>全 156 集。失去强大超能力之后，猪猪们还是义无反顾地奔向九霄星。</p>
+                        </div>
+                        <span class="tl__eps">156 集</span>
+                    </li>
+                    <li class="tl__item" data-kind="season">
+                        <span class="tl__year">2022-2024</span>
+                        <div class="tl__body">
+                            <h3>第十五季 · 竞速小英雄（5-8）</h3>
+                            <p>主角换成猪猪侠与星航，舞台是竞速星球的赛道；与 1-4 部差异巨大，因此单独统计。</p>
+                        </div>
+                        <span class="tl__eps">104 集</span>
+                    </li>
+
+                    <li class="tl__item" data-kind="sp" hidden>
+                        <span class="tl__year tl__year--sp">番外</span>
+                        <div class="tl__body">
+                            <h3>拼装特工队</h3>
+                            <p>全 26 集的拼装主题番外，特工小队换上全新的机甲装备。</p>
+                        </div>
+                        <span class="tl__eps">26 集</span>
+                    </li>
+                    <li class="tl__item" data-kind="sp" hidden>
+                        <span class="tl__year tl__year--sp">番外</span>
+                        <div class="tl__body">
+                            <h3>环球日记</h3>
+                            <p>全 26 集，跟着猪猪侠环游世界，每集认识一个地方。</p>
+                        </div>
+                        <span class="tl__eps">26 集</span>
+                    </li>
+                    <li class="tl__item" data-kind="sp" hidden>
+                        <span class="tl__year tl__year--sp">番外</span>
+                        <div class="tl__body">
+                            <h3>恐龙日记</h3>
+                            <p>全 156 集的恐龙主题番外，是集数最多的一条支线。</p>
+                        </div>
+                        <span class="tl__eps">156 集</span>
+                    </li>
+
+                    <li class="tl__item" data-kind="movie" hidden>
+                        <span class="tl__year">2005</span>
+                        <div class="tl__body">
+                            <h3>猪猪侠之大闹皇宫</h3>
+                            <p>系列的第一部大电影，共 4 集，以番外篇形式推出。</p>
+                        </div>
+                        <span class="tl__eps">电影</span>
+                    </li>
+                    <li class="tl__item" data-kind="movie" hidden>
+                        <span class="tl__year">2012</span>
+                        <div class="tl__body"><h3>猪猪侠之囧囧危机</h3><p>猪猪侠重返大银幕之作。</p></div>
+                        <span class="tl__eps">电影</span>
+                    </li>
+                    <li class="tl__item" data-kind="movie" hidden>
+                        <span class="tl__year">2014</span>
+                        <div class="tl__body"><h3>猪猪侠之勇闯巨人岛</h3><p>冒险升级，猪猪侠一行登上神秘的巨人岛。</p></div>
+                        <span class="tl__eps">电影</span>
+                    </li>
+                    <li class="tl__item" data-kind="movie" hidden>
+                        <span class="tl__year">2015</span>
+                        <div class="tl__body"><h3>猪猪侠之终极决战</h3><p>与特别篇《终极决战前夜篇》前后呼应。</p></div>
+                        <span class="tl__eps">电影</span>
+                    </li>
+                    <li class="tl__item" data-kind="movie" hidden>
+                        <span class="tl__year">2017</span>
+                        <div class="tl__body"><h3>猪猪侠之英雄猪少年</h3><p>获广东省「五个一工程」奖。</p></div>
+                        <span class="tl__eps">电影</span>
+                    </li>
+                    <li class="tl__item" data-kind="movie" hidden>
+                        <span class="tl__year">2019</span>
+                        <div class="tl__body"><h3>猪猪侠·不可思议的世界</h3><p>一次关于世界与成长的冒险。</p></div>
+                        <span class="tl__eps">电影</span>
+                    </li>
+                    <li class="tl__item" data-kind="movie" hidden>
+                        <span class="tl__year">2021</span>
+                        <div class="tl__body"><h3>猪猪侠大电影·恐龙日记</h3><p>由咏声动漫与苏州奥拉动漫科技联合出品。</p></div>
+                        <span class="tl__eps">电影</span>
+                    </li>
+                    <li class="tl__item" data-kind="movie" hidden>
+                        <span class="tl__year">2022</span>
+                        <div class="tl__body"><h3>猪猪侠大电影·海洋日记</h3><p>把冒险带到海底世界。</p></div>
+                        <span class="tl__eps">电影</span>
+                    </li>
+                    <li class="tl__item" data-kind="movie" hidden>
+                        <span class="tl__year">2023</span>
+                        <div class="tl__body"><h3>新猪猪侠大电影·超级赛车</h3><p>赛道主题的院线大电影。</p></div>
+                        <span class="tl__eps">电影</span>
+                    </li>
+                    <li class="tl__item" data-kind="movie" hidden>
+                        <span class="tl__year">2024</span>
+                        <div class="tl__body"><h3>猪猪侠大电影·星际行动</h3><p>瞄准星空的一次行动。</p></div>
+                        <span class="tl__eps">电影</span>
+                    </li>
+                    <li class="tl__item" data-kind="movie" hidden>
+                        <span class="tl__year">2025</span>
+                        <div class="tl__body"><h3>猪猪侠·一只老猪的逆袭</h3><p>系列最新一部院线电影，老朋友的再一次登场。</p></div>
+                        <span class="tl__eps">电影</span>
+                    </li>
+
+                    <li class="tl__item" data-kind="stage" hidden>
+                        <span class="tl__year tl__year--sp">舞台剧</span>
+                        <div class="tl__body">
+                            <h3>天使奇遇记</h3>
+                            <p>美丽的菲菲因遭女巫嫉妒被夺去美丽，在猪猪侠的帮助下找回美丽，成为人们心目中的爱心天使。</p>
+                        </div>
+                        <span class="tl__eps">舞台剧</span>
+                    </li>
+                    <li class="tl__item" data-kind="stage" hidden>
+                        <span class="tl__year tl__year--sp">舞台剧</span>
+                        <div class="tl__body">
+                            <h3>仙豆传奇</h3>
+                            <p>猪猪侠与菲菲、小呆呆、超人强、波比在金鹅岛战胜重重困难抵达巨人城堡，却发现没有巨人只有小矮人；杰克抢夺金蛋，猪猪侠打败杰克、保卫金蛋，赢得小矮人的友谊。</p>
+                        </div>
+                        <span class="tl__eps">舞台剧</span>
+                    </li>
+                    <li class="tl__item" data-kind="stage" hidden>
+                        <span class="tl__year tl__year--sp">舞台剧</span>
+                        <div class="tl__body">
+                            <h3>时间去哪儿</h3>
+                            <p>猪猪侠因父母常不在身边而离家出走，被化身魔龙王的玫瑰王子控制化作宝石，父母在朋友帮助下解救了他，一家人通过沟通化解误会。</p>
+                        </div>
+                        <span class="tl__eps">舞台剧</span>
+                    </li>
+                    <li class="tl__item" data-kind="stage" hidden>
+                        <span class="tl__year tl__year--sp">舞台剧</span>
+                        <div class="tl__body">
+                            <h3>变身小英雄</h3>
+                            <p>传说世界里的 X 晶体既能打开黑暗世界之门毁灭世界，也能净化人类心灵，只有内心纯洁的五灵卫才能感应。猪猪侠与父亲巴罗前往长鼻国寻找 X 晶体，黑心怪败走。</p>
+                        </div>
+                        <span class="tl__eps">舞台剧</span>
+                    </li>
+                </ol>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ 名曲馆 ============ -->
+    <section class="section section--songs" id="songs">
+        <div class="wrap">
+            <header class="section-head" data-reveal>
+                <p class="eyebrow"><span class="eyebrow__dot"></span>SOUNDTRACK</p>
+                <h2 class="section-title">名曲馆</h2>
+                <p class="section-sub">
+                    二十年来，片头曲和片尾曲换了一首又一首。点一下歌名，看看它陪你走过了哪几季。
+                </p>
+            </header>
+
+            <div class="songs" data-reveal>
+                <div class="songs__deck">
+                    <div class="vinyl" id="vinyl" aria-hidden="true"><span></span></div>
+                    <div class="songs__now">
+                        <p class="songs__now-label">当前选中</p>
+                        <h3 id="songNow">超级棒棒糖</h3>
+                        <p id="songNowScope">片尾曲 · 自第 8 季开始</p>
+                        <button class="btn btn--ghost js-play-music" type="button">播放本站背景音乐</button>
+                    </div>
+                </div>
+
+                <div class="songs__lists">
+                    <section class="song-group">
+                        <h3 class="song-group__title"><span>OP</span>片头曲</h3>
+                        <ul class="song-list" id="songOp">
+                            <li><button class="song" type="button" data-scope="第 1-4 季"><span class="song__name">猪猪侠</span><span class="song__meta">第 1-4 季</span></button></li>
+                            <li><button class="song is-active" type="button" data-scope="自第 5 季开始"><span class="song__name">小英雄大肚腩</span><span class="song__meta">自第 5 季开始</span></button></li>
+                            <li><button class="song" type="button" data-scope="竞速小英雄 5-8"><span class="song__name">竞速小英雄</span><span class="song__meta">竞速小英雄 5-8</span></button></li>
+                        </ul>
+                    </section>
+
+                    <section class="song-group">
+                        <h3 class="song-group__title"><span>ED</span>片尾曲</h3>
+                        <ul class="song-list" id="songEd">
+                            <li><button class="song" type="button" data-scope="第 1-5 季"><span class="song__name">绿色的旋律</span><span class="song__meta">第 1-5 季</span></button></li>
+                            <li><button class="song" type="button" data-scope="第 6-7 季"><span class="song__name">猪猪侠</span><span class="song__meta">第 6-7 季</span></button></li>
+                            <li><button class="song" type="button" data-scope="自第 8 季开始"><span class="song__name">超级棒棒糖</span><span class="song__meta">自第 8 季开始</span></button></li>
+                            <li><button class="song" type="button" data-scope="自竞球小英雄 3 开始"><span class="song__name">猪年吉祥</span><span class="song__meta">自竞球小英雄 3 开始</span></button></li>
+                            <li><button class="song" type="button" data-scope="超星五灵侠 1-4"><span class="song__name">勇敢的小猪</span><span class="song__meta">超星五灵侠 1-4</span></button></li>
+                            <li><button class="song" type="button" data-scope="竞速小英雄 5-8"><span class="song__name">赢自己的比赛</span><span class="song__meta">竞速小英雄 5-8</span></button></li>
+                            <li><button class="song" type="button" data-scope="超星五灵侠 5-6"><span class="song__name">功夫猪</span><span class="song__meta">超星五灵侠 5-6</span></button></li>
+                        </ul>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- ============ 产品库 ============ -->
     <section class="section section--products" id="products">
         <div class="wrap">
@@ -215,6 +728,57 @@ if ('IntersectionObserver' in window) {
                     <button class="btn btn--primary js-detail" type="button" data-product="2">查看详情</button>
                 </div>
             </article>
+        </div>
+    </section>
+
+    <!-- ============ 荣誉墙 ============ -->
+    <section class="section section--honours" id="honours">
+        <div class="wrap">
+            <header class="section-head" data-reveal>
+                <p class="eyebrow"><span class="eyebrow__dot"></span>HONOURS &amp; NUMBERS</p>
+                <h2 class="section-title">荣誉墙</h2>
+                <p class="section-sub">
+                    来自广东咏声动漫官方介绍的一组数字，以及猪猪侠这些年捧回的奖。
+                </p>
+            </header>
+
+            <ul class="honour-stats" data-reveal>
+                <li><strong>4,500<em>+</em></strong><span>全国运营中的猪猪侠亲子主题房</span></li>
+                <li><strong>100<em>+</em></strong><span>家授权合作企业</span></li>
+                <li><strong>80<em>+</em></strong><span>个国家和地区的内容覆盖</span></li>
+                <li><strong>150<em>+</em></strong><span>家境内外播放平台</span></li>
+                <li><strong>12</strong><span>个衍生品覆盖产业</span></li>
+                <li><strong>2005</strong><span>年开始创作的原创 IP</span></li>
+            </ul>
+
+            <ol class="honour-list" data-reveal>
+                <li><span class="honour-list__year">2026</span>
+                    <p>「国民『猪猪侠』IP 出海全产业链贸易服务示范」入选服贸会文化创意示范案例。</p></li>
+                <li><span class="honour-list__year">2026</span>
+                    <p>「京东外卖 × 猪猪侠」联名获中国授权业大奖年度创新授权项目。</p></li>
+                <li><span class="honour-list__year">2024</span>
+                    <p>《猪猪侠之魔幻侏罗纪》入选国家广播电视总局「重温经典」百部作品展播。</p></li>
+                <li><span class="honour-list__year">2021</span>
+                    <p>「猪猪侠」纳入广东省重点商标保护名录。</p></li>
+                <li><span class="honour-list__year">2018</span>
+                    <p>猪猪侠受聘为广州市「扫黄打非」宣传形象大使。</p></li>
+                <li><span class="honour-list__year">2018</span>
+                    <p>《猪猪侠之超星萌宠》获电视专题类二等奖。</p></li>
+                <li><span class="honour-list__year">2017</span>
+                    <p>《猪猪侠之英雄猪少年》获广东省「五个一工程」奖。</p></li>
+                <li><span class="honour-list__year">2016</span>
+                    <p>《猪猪侠之五灵守卫者》获评年度优秀国产动画。</p></li>
+                <li><span class="honour-list__year">2015</span>
+                    <p>《猪猪侠之变身战队》获评年度优秀电视动画。</p></li>
+                <li><span class="honour-list__year">2012</span>
+                    <p>猪猪侠被认定为国家重点动漫产品。</p></li>
+                <li><span class="honour-list__year">2010</span>
+                    <p>荣获中国十大卡通形象大奖。</p></li>
+                <li><span class="honour-list__year">2009</span>
+                    <p>《百变猪猪侠》获最具产业价值作品奖。</p></li>
+            </ol>
+
+            <p class="honour-note" data-reveal>数据与荣誉整理自广东咏声动漫官网公开资料（winsing.net）。</p>
         </div>
     </section>
 
@@ -319,6 +883,44 @@ if ('IntersectionObserver' in window) {
         </div>
     </section>
 
+    <!-- ============ 趣味问答 ============ -->
+    <section class="section section--quiz" id="quiz">
+        <div class="wrap">
+            <header class="section-head section-head--center" data-reveal>
+                <p class="eyebrow"><span class="eyebrow__dot"></span>QUIZ</p>
+                <h2 class="section-title">猪猪粉等级测试</h2>
+                <p class="section-sub">
+                    八道题，全部取材于上面的年表、角色档案与官方资料。看看你能拿到什么称号。
+                </p>
+            </header>
+
+            <div class="quiz" id="quizBox" data-reveal>
+                <div class="quiz__bar">
+                    <span class="quiz__count">第 <strong id="quizIndex">1</strong> / <span id="quizTotal">8</span> 题</span>
+                    <span class="quiz__score">得分 <strong id="quizScore">0</strong></span>
+                </div>
+                <h3 class="quiz__q" id="quizQuestion">正在出题…</h3>
+                <ul class="quiz__options" id="quizOptions"></ul>
+                <p class="quiz__note" id="quizNote" hidden></p>
+                <div class="quiz__foot">
+                    <button class="btn btn--primary" id="quizNext" type="button" disabled>下一题</button>
+                    <button class="btn btn--ghost" id="quizReset" type="button">重新开始</button>
+                </div>
+            </div>
+
+            <div class="quiz-result" id="quizResult" hidden>
+                <p class="quiz-result__score"><strong id="quizFinal">0</strong><span>/ 8</span></p>
+                <h3 class="quiz-result__rank" id="quizRank">称号</h3>
+                <p class="quiz-result__note" id="quizRankNote"></p>
+                <button class="btn btn--primary" id="quizAgain" type="button">再来一次</button>
+            </div>
+
+            <noscript>
+                <p class="honour-note">趣味问答需要开启 JavaScript 才能作答；其余内容无需脚本即可阅读。</p>
+            </noscript>
+        </div>
+    </section>
+
 </main>
 
 <!-- ============ 页脚 ============ -->
@@ -331,14 +933,27 @@ if ('IntersectionObserver' in window) {
         <nav class="footer__links" aria-label="页脚导航">
             <a href="#hero">首页</a>
             <a href="#heroes">英雄展示</a>
+            <a href="#profiles">角色档案</a>
+            <a href="#timeline">系列年表</a>
+            <a href="#songs">名曲馆</a>
             <a href="#products">产品库</a>
+            <a href="#honours">荣誉墙</a>
             <a href="#festival">新春快乐</a>
             <a href="#shop">猪猪商城</a>
+            <a href="#quiz">趣味问答</a>
         </nav>
     </div>
     <div class="wrap footer__credit">
         <hr>
         <p>本网站由涂济炜、朱显杰共同制作</p>
+        <ul class="footer__sources">
+            <li>资料整理自
+                <a href="https://zh.wikipedia.org/wiki/猪猪侠" target="_blank" rel="noopener noreferrer">维基百科《猪猪侠》</a>、
+                <a href="https://www.winsing.net/" target="_blank" rel="noopener noreferrer">广东咏声动漫官网</a> 与
+                <a href="https://search.bilibili.com/all?keyword=猪猪侠" target="_blank" rel="noopener noreferrer">哔哩哔哩番剧库</a>。
+            </li>
+            <li>剧集封面取自哔哩哔哩番剧库公开资料，相关图文版权归原权利人所有；本站为非官方粉丝展示页。</li>
+        </ul>
         <p class="footer__note">静态展示页面 · 托管于 GitHub Pages</p>
     </div>
 </footer>
@@ -380,6 +995,6 @@ if ('IntersectionObserver' in window) {
 <!-- 背景音乐：默认不加载，点击右下角音符后才会请求音频文件 -->
 <audio id="bgMusic" loop preload="none"></audio>
 
-<script src="ggb.js?v=2" type="text/javascript"></script>
+<script src="ggb.js?v=3" type="text/javascript"></script>
 </body>
 </html>

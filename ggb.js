@@ -1,7 +1,8 @@
 /* ==========================================================================
    猪猪侠 GG Bond · 展示站交互脚本
    功能：导航（滚动状态/进度条/锚点高亮/移动端菜单）、英雄轮播、新春倒计时、
-        商品详情弹窗、滚动出现动效、回到顶部、背景音乐开关。
+        商品详情弹窗、滚动出现动效、回到顶部、背景音乐开关、
+        系列年表筛选、名曲馆、趣味问答。
    无任何外部依赖，纯原生实现。
    ========================================================================== */
 (function () {
@@ -518,6 +519,259 @@
         }
         var p = video.play();
         if (p && p.catch) { p.catch(function () { /* 浏览器拦截自动播放时保留海报图 */ }); }
+    })();
+
+    /* ======================================================================
+       9. 系列年表：按类型筛选（电视动画 / 番外篇 / 大电影 / 舞台剧）
+       ====================================================================== */
+    (function initTimeline() {
+        var tabs = $$('.tabs .tab');
+        var list = $('#timelineList');
+        if (!tabs.length || !list) { return; }
+
+        var items = $$('.tl__item', list);
+
+        function apply(kind) {
+            items.forEach(function (li) {
+                li.hidden = li.getAttribute('data-kind') !== kind;
+            });
+        }
+
+        tabs.forEach(function (tab) {
+            tab.addEventListener('click', function () {
+                tabs.forEach(function (t) {
+                    var on = t === tab;
+                    t.classList.toggle('is-active', on);
+                    t.setAttribute('aria-selected', on ? 'true' : 'false');
+                });
+                apply(tab.getAttribute('data-filter'));
+            });
+        });
+
+        var initial = $('.tabs .tab.is-active');
+        apply(initial ? initial.getAttribute('data-filter') : 'season');
+    })();
+
+    /* ======================================================================
+       10. 名曲馆：点选片头曲 / 片尾曲
+       ====================================================================== */
+    (function initSongs() {
+        var songs = $$('.song');
+        var now = $('#songNow');
+        var scope = $('#songNowScope');
+        var vinyl = $('#vinyl');
+        if (!songs.length || !now || !scope) { return; }
+
+        songs.forEach(function (song) {
+            song.addEventListener('click', function () {
+                songs.forEach(function (s) { s.classList.remove('is-active'); });
+                song.classList.add('is-active');
+
+                var nameEl = $('.song__name', song);
+                now.textContent = nameEl ? nameEl.textContent : '';
+
+                var group = song.closest ? song.closest('.song-group') : null;
+                var title = group ? $('.song-group__title', group) : null;
+                /* 标题形如「OP片头曲」「ED片尾曲」，取掉前缀英文缩写 */
+                var label = title ? title.textContent.replace(/^OP/, '').replace(/^ED/, '').trim() : '';
+                var scopeText = song.getAttribute('data-scope') || '';
+                scope.textContent = (label ? label + ' · ' : '') + scopeText;
+
+                if (vinyl) { vinyl.classList.add('is-spinning'); }
+            });
+        });
+
+        /* 「播放本站背景音乐」转发给右下角的音乐开关（已在播放时不再重复触发暂停） */
+        var playBtn = $('.js-play-music');
+        var toggle = $('#musicToggle');
+        var audio = $('#bgMusic');
+        if (playBtn && toggle) {
+            playBtn.addEventListener('click', function () {
+                if (audio && !audio.paused && !audio.ended) { return; }
+                toggle.click();
+            });
+        }
+    })();
+
+    /* ======================================================================
+       11. 趣味问答：随机抽题 + 打乱选项 + 即时判分
+       ====================================================================== */
+    (function initQuiz() {
+        var box = $('#quizBox');
+        var result = $('#quizResult');
+        if (!box || !result) { return; }
+
+        var elIndex = $('#quizIndex');
+        var elTotal = $('#quizTotal');
+        var elScore = $('#quizScore');
+        var elQuestion = $('#quizQuestion');
+        var elOptions = $('#quizOptions');
+        var elNote = $('#quizNote');
+        var btnNext = $('#quizNext');
+        var btnReset = $('#quizReset');
+        var btnAgain = $('#quizAgain');
+        var elFinal = $('#quizFinal');
+        var elRank = $('#quizRank');
+        var elRankNote = $('#quizRankNote');
+        var LETTERS = ['A', 'B', 'C', 'D'];
+        var COUNT = 8;
+
+        /* q=题目，options[correct]=正确项，note=答后解析 */
+        var POOL = [
+            { q: '「GG Bond」里的 GG 来自什么？',
+              options: ['粤语「猪」的发音', '英文 good game', '主角的编号', '导演的名字'], correct: 0,
+              note: 'GG 取自粤语「猪」的发音，Bond 则是「侠」的意译。' },
+            { q: '猪猪侠系列目前共有几季电视动画？',
+              options: ['17 季', '12 季', '25 季', '9 季'], correct: 0,
+              note: '从 2006 年的《魔幻猪猡纪》起，正季共 17 季，合计 1324 集。' },
+            { q: '《超级棒棒糖》是从第几季开始成为片尾曲的？',
+              options: ['第 8 季', '第 1 季', '第 13 季', '第 17 季'], correct: 0,
+              note: '自第 8 季起，片尾曲换成《超级棒棒糖》。' },
+            { q: '小呆呆原本是一个……？',
+              options: ['天才儿童', '机器人', '外星人', '老师'], correct: 0,
+              note: '第二季里，他因长期食用假冒伪劣的超级棒棒糖而变得痴呆。' },
+            { q: '超人强是哪个小学的校董的儿子？',
+              options: ['强强科技小学', '猪猪小学', '未来之星小学', '童话小学'], correct: 0,
+              note: '第三季里他自持家境富裕、骄傲自满，是猪猪侠的死对头。' },
+            { q: '系列第一部大电影是哪一年推出的？',
+              options: ['2005 年', '2012 年', '2015 年', '2019 年'], correct: 0,
+              note: '2005 年的《猪猪侠之大闹皇宫》，最早还是 4 集番外篇。' },
+            { q: '「五灵锁」能让猪猪侠变身成几种兽型战士？',
+              options: ['五种', '三种', '七种', '十种'], correct: 0,
+              note: '五灵锁对应五灵力量，可以变身为五种兽型战士。' },
+            { q: '全国有多少间猪猪侠亲子主题房在运营？',
+              options: ['超过 4500 间', '超过 450 间', '超过 150 间', '超过 4.5 万间'], correct: 0,
+              note: '据咏声动漫官网，全国有超过 4500 间猪猪侠亲子主题房在运营。' },
+            { q: '从第五季开始的片头曲叫什么？',
+              options: ['小英雄大肚腩', '超级棒棒糖', '绿色的旋律', '猪年吉祥'], correct: 0,
+              note: '《小英雄大肚腩》自第 5 季《积木世界的童话故事》起作为片头曲。' },
+            { q: '波比最擅长的事是？',
+              options: ['讨好超人强、拍马屁', '发明机器', '开赛车', '做棒棒糖'], correct: 0,
+              note: '作为超人强的小跟班，他拍马屁常常不分场合，经常拍错马屁。' },
+            { q: '迷糊老师从第十三季开始被叫作什么？',
+              options: ['迷糊博士', '迷糊教授', '迷糊队长', '迷糊老师傅'], correct: 0,
+              note: '第十三季起改称「迷糊博士」，在《超星萌宠》里指导猪猪侠成为星际特工。' }
+        ];
+
+        var picked = [];
+        var step = 0;
+        var score = 0;
+        var answered = false;
+        var current = null;
+
+        function shuffle(arr) {
+            for (var i = arr.length - 1; i > 0; i--) {
+                var j = Math.floor(Math.random() * (i + 1));
+                var t = arr[i];
+                arr[i] = arr[j];
+                arr[j] = t;
+            }
+            return arr;
+        }
+
+        function render() {
+            answered = false;
+            current = picked[step];
+
+            elIndex.textContent = step + 1;
+            elQuestion.textContent = current.q;
+            elNote.hidden = true;
+            elNote.textContent = '';
+            btnNext.disabled = true;
+            btnNext.textContent = step === picked.length - 1 ? '查看结果' : '下一题';
+
+            var opts = current.options.map(function (text, i) {
+                return { text: text, right: i === current.correct };
+            });
+            shuffle(opts);
+
+            elOptions.innerHTML = '';
+            opts.forEach(function (o, i) {
+                var btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = 'quiz__option';
+                btn.setAttribute('data-right', o.right ? '1' : '0');
+
+                var badge = document.createElement('b');
+                badge.textContent = LETTERS[i] || String(i + 1);
+                var label = document.createElement('span');
+                label.textContent = o.text;
+
+                btn.appendChild(badge);
+                btn.appendChild(label);
+                btn.addEventListener('click', function () { choose(btn, o); });
+                elOptions.appendChild(btn);
+            });
+        }
+
+        function choose(btn, opt) {
+            if (answered) { return; }
+            answered = true;
+
+            $$('.quiz__option', elOptions).forEach(function (b) {
+                b.disabled = true;
+                if (b.getAttribute('data-right') === '1') { b.classList.add('is-right'); }
+            });
+            if (opt.right) {
+                score += 1;
+            } else {
+                btn.classList.add('is-wrong');
+            }
+            elScore.textContent = score;
+
+            if (current.note) {
+                elNote.textContent = current.note;
+                elNote.hidden = false;
+            }
+            btnNext.disabled = false;
+        }
+
+        function finish() {
+            box.hidden = true;
+            result.hidden = false;
+            elFinal.textContent = score;
+
+            var rank = '新入坑的小猪';
+            var note = '别灰心，去「系列年表」逛一圈，回来就能拿满分。';
+            if (score >= picked.length) {
+                rank = '骨灰级猪猪粉';
+                note = '全对！从 2005 年的大闹皇宫到超星五灵侠，你一部都没落下。';
+            } else if (score >= 6) {
+                rank = '资深粉丝';
+                note = '很接近满分，只差一点点冷知识。';
+            } else if (score >= 4) {
+                rank = '合格猪猪迷';
+                note = '基础挺扎实，再翻翻年表和角色档案就能上分。';
+            }
+            elRank.textContent = rank;
+            elRankNote.textContent = note;
+            if (btnAgain) { btnAgain.focus(); }
+        }
+
+        function build() {
+            picked = shuffle(POOL.slice()).slice(0, Math.min(COUNT, POOL.length));
+            step = 0;
+            score = 0;
+            elTotal.textContent = picked.length;
+            elScore.textContent = '0';
+            box.hidden = false;
+            result.hidden = true;
+            render();
+        }
+
+        btnNext.addEventListener('click', function () {
+            if (!answered) { return; }
+            if (step < picked.length - 1) {
+                step += 1;
+                render();
+            } else {
+                finish();
+            }
+        });
+        if (btnReset) { btnReset.addEventListener('click', build); }
+        if (btnAgain) { btnAgain.addEventListener('click', build); }
+
+        build();
     })();
 
 })();
