@@ -1,8 +1,8 @@
 /* ==========================================================================
    猪猪侠 GG Bond · 展示站交互脚本
    功能：导航（滚动状态/进度条/锚点高亮/移动端菜单）、英雄轮播、新春倒计时、
-        商品详情弹窗、滚动出现动效、回到顶部、背景音乐开关、
-        系列年表筛选、名曲馆、趣味问答。
+        商品详情弹窗、滚动出现动效、回到顶部、名曲馆播放器（点歌切换 / 进度条 /
+        播完自动下一首 / 右下角悬浮开关）、系列年表筛选、趣味问答。
    无任何外部依赖，纯原生实现。
    ========================================================================== */
 (function () {
@@ -467,42 +467,180 @@
     })();
 
     /* ======================================================================
-       7. 背景音乐开关（默认不加载音频，点击后才开始下载）
+       7. 名曲馆播放器：全站共用一个 <audio id="bgMusic">
+          - 点歌名即换音源并播放（data-audio 指向 audioes/ 下对应的 m4a）
+          - 右下角悬浮开关、卡片里的大按钮控制的是同一个播放器
+          - 一首放完自动接上列表里的下一首；默认不加载音频，点击后才下载
        ====================================================================== */
     (function initMusic() {
-        var btn = $('#musicToggle');
         var audio = $('#bgMusic');
-        if (!btn || !audio) { return; }
+        if (!audio) { return; }
 
-        /* 仓库里的音乐文件名本身带一个空格，且扩展名是 .mp4（纯音频容器），保持原样引用 */
-        var MUSIC_SRC = './audioes/1401568647-1-192 .mp4';
-        var ready = false;
+        var songs = $$('.song');
+        var toggle = $('#musicToggle');
+        var playBtn = $('.js-play-music');
+        var now = $('#songNow');
+        var scope = $('#songNowScope');
+        var vinyl = $('#vinyl');
+        var bar = $('#songProgress');
+        var fill = $('#songProgressFill');
+        var timeEl = $('#songTime');
+        var durEl = $('#songDur');
 
-        function sync() {
-            var playing = !audio.paused && !audio.ended;
-            btn.classList.toggle('is-on', playing);
-            btn.setAttribute('aria-pressed', playing ? 'true' : 'false');
-            btn.setAttribute('aria-label', playing ? '暂停背景音乐' : '播放背景音乐');
+        var VOLUME = 0.6;
+        var current = -1;
+
+        function nameOf(song) {
+            var el = $('.song__name', song);
+            return el ? el.textContent.trim() : '';
         }
 
-        btn.addEventListener('click', function () {
-            if (!ready) {
-                audio.src = MUSIC_SRC;
-                audio.volume = 0.35;
-                ready = true;
-                audio.load();
+        function scopeOf(song) {
+            var group = song.closest ? song.closest('.song-group') : null;
+            var title = group ? $('.song-group__title', group) : null;
+            /* 标题形如「OP片头曲」「ED片尾曲」，去掉前缀英文缩写 */
+            var label = title ? title.textContent.replace(/^OP/, '').replace(/^ED/, '').trim() : '';
+            var text = song.getAttribute('data-scope') || '';
+            return (label ? label + ' · ' : '') + text;
+        }
+
+        function fmt(sec) {
+            if (!isFinite(sec) || sec < 0) { return '--:--'; }
+            var m = Math.floor(sec / 60);
+            var s = Math.floor(sec % 60);
+            return m + ':' + (s < 10 ? '0' : '') + s;
+        }
+
+        function defaultIndex() {
+            for (var i = 0; i < songs.length; i += 1) {
+                if (songs[i].classList.contains('is-active')) { return i; }
             }
-            if (audio.paused) {
-                var p = audio.play();
-                if (p && p.catch) { p.catch(function () { sync(); }); }
+            return 0;
+        }
+
+        function mark() {
+            var on = !audio.paused && !audio.ended;
+            songs.forEach(function (s, j) {
+                s.classList.toggle('is-active', j === current);
+                s.classList.toggle('is-playing', j === current && on);
+                s.setAttribute('aria-current', j === current ? 'true' : 'false');
+            });
+        }
+
+        var lastOn = null;
+
+        function sync() {
+            var on = !audio.paused && !audio.ended;
+            /* 播放状态改变时才动按钮和唱片，timeupdate 只更新进度，避免无谓的 DOM 写入 */
+            if (on !== lastOn) {
+                lastOn = on;
+                if (toggle) {
+                    toggle.classList.toggle('is-on', on);
+                    toggle.setAttribute('aria-pressed', on ? 'true' : 'false');
+                    toggle.setAttribute('aria-label', on ? '暂停播放' : '播放名曲馆里的歌');
+                }
+                if (vinyl) { vinyl.classList.toggle('is-spinning', on); }
+                if (playBtn) {
+                    playBtn.textContent = on ? '⏸ 暂停' : '▶ 播放';
+                    playBtn.setAttribute('aria-label', on ? '暂停' : '播放选中的歌');
+                }
+                mark();
+            }
+            if (durEl) { durEl.textContent = fmt(audio.duration); }
+            if (timeEl) { timeEl.textContent = fmt(audio.currentTime); }
+            if (fill && audio.duration) {
+                fill.style.width = (audio.currentTime / audio.duration * 100).toFixed(2) + '%';
+            }
+            if (bar && audio.duration) {
+                bar.setAttribute('aria-valuenow', String(Math.round(audio.currentTime / audio.duration * 100)));
+            }
+        }
+
+        function play() {
+            var p = audio.play();
+            if (p && p.catch) { p.catch(function () { sync(); }); }
+        }
+
+        function select(i, autoplay) {
+            if (i < 0 || i >= songs.length) { return; }
+            var song = songs[i];
+            var src = song.getAttribute('data-audio');
+            if (!src) { return; }
+
+            var changed = i !== current;
+            current = i;
+            if (now) { now.textContent = nameOf(song); }
+            if (scope) { scope.textContent = scopeOf(song); }
+
+            if (changed) {
+                audio.src = src;
+                audio.volume = VOLUME;
+                audio.load();
+                if (fill) { fill.style.width = '0'; }
+                if (timeEl) { timeEl.textContent = '0:00'; }
+                if (durEl) { durEl.textContent = '--:--'; }
+            }
+            mark();
+            if (autoplay) { play(); }
+        }
+
+        function togglePlay() {
+            if (audio.paused || audio.ended) {
+                if (current < 0) { select(defaultIndex(), true); } else { play(); }
             } else {
                 audio.pause();
             }
+        }
+
+        songs.forEach(function (song, i) {
+            song.addEventListener('click', function () {
+                if (i === current && !audio.paused && !audio.ended) {
+                    audio.pause();
+                    return;
+                }
+                select(i, true);
+            });
         });
+
+        if (playBtn) { playBtn.addEventListener('click', togglePlay); }
+        if (toggle) { toggle.addEventListener('click', togglePlay); }
+
+        function seekTo(ratio) {
+            if (!audio.duration) { return; }
+            audio.currentTime = Math.min(audio.duration, Math.max(0, ratio * audio.duration));
+            sync();
+        }
+
+        if (bar) {
+            bar.addEventListener('click', function (e) {
+                var r = bar.getBoundingClientRect();
+                if (!r.width) { return; }
+                seekTo((e.clientX - r.left) / r.width);
+            });
+            bar.addEventListener('keydown', function (e) {
+                if (!audio.duration) { return; }
+                if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
+                    audio.currentTime = Math.min(audio.duration,
+                        Math.max(0, audio.currentTime + (e.key === 'ArrowRight' ? 5 : -5)));
+                    sync();
+                    e.preventDefault();
+                }
+            });
+        }
 
         audio.addEventListener('play', sync);
         audio.addEventListener('pause', sync);
-        audio.addEventListener('ended', sync);
+        audio.addEventListener('timeupdate', sync);
+        audio.addEventListener('loadedmetadata', sync);
+        audio.addEventListener('ended', function () {
+            /* 播完自动接着下一首；最后一首播完就停下，不反复循环 */
+            if (current < 0 || current >= songs.length - 1) {
+                sync();
+                return;
+            }
+            select(current + 1, true);
+        });
+
         sync();
     })();
 
@@ -553,48 +691,7 @@
     })();
 
     /* ======================================================================
-       10. 名曲馆：点选片头曲 / 片尾曲
-       ====================================================================== */
-    (function initSongs() {
-        var songs = $$('.song');
-        var now = $('#songNow');
-        var scope = $('#songNowScope');
-        var vinyl = $('#vinyl');
-        if (!songs.length || !now || !scope) { return; }
-
-        songs.forEach(function (song) {
-            song.addEventListener('click', function () {
-                songs.forEach(function (s) { s.classList.remove('is-active'); });
-                song.classList.add('is-active');
-
-                var nameEl = $('.song__name', song);
-                now.textContent = nameEl ? nameEl.textContent : '';
-
-                var group = song.closest ? song.closest('.song-group') : null;
-                var title = group ? $('.song-group__title', group) : null;
-                /* 标题形如「OP片头曲」「ED片尾曲」，取掉前缀英文缩写 */
-                var label = title ? title.textContent.replace(/^OP/, '').replace(/^ED/, '').trim() : '';
-                var scopeText = song.getAttribute('data-scope') || '';
-                scope.textContent = (label ? label + ' · ' : '') + scopeText;
-
-                if (vinyl) { vinyl.classList.add('is-spinning'); }
-            });
-        });
-
-        /* 「播放本站背景音乐」转发给右下角的音乐开关（已在播放时不再重复触发暂停） */
-        var playBtn = $('.js-play-music');
-        var toggle = $('#musicToggle');
-        var audio = $('#bgMusic');
-        if (playBtn && toggle) {
-            playBtn.addEventListener('click', function () {
-                if (audio && !audio.paused && !audio.ended) { return; }
-                toggle.click();
-            });
-        }
-    })();
-
-    /* ======================================================================
-       11. 趣味问答：随机抽题 + 打乱选项 + 即时判分
+       10. 趣味问答：随机抽题 + 打乱选项 + 即时判分
        ====================================================================== */
     (function initQuiz() {
         var box = $('#quizBox');

@@ -22,11 +22,13 @@ python -m http.server 8000
 .
 ├── index.html          # 页面结构（单页，锚点导航）
 ├── style.css           # 全部样式，按 16 个区块分段注释
-├── ggb.js              # 全部交互：轮播 / 倒计时 / 弹窗 / 年表 / 名曲馆 / 问答 / 动效 / 音乐
+├── ggb.js              # 全部交互：轮播 / 倒计时 / 弹窗 / 年表 / 名曲馆播放器 / 问答 / 动效
 ├── images/             # 图片素材（含 8 张季封面）
-├── audioes/            # 背景音乐（约 21 MB，默认不加载，点击按钮才下载）
+├── audioes/            # 9 首歌曲音源（song_*.m4a，共约 9 MB，默认不加载，点歌才下载）
 └── vedioes/            # 首屏背景视频
 ```
+
+> `audioes/1401568647-1-192 .mp4`（约 21 MB）是旧站留下的背景音乐，已不再被页面引用，可以自行删除。
 
 ## 页面对应关系
 
@@ -36,7 +38,7 @@ python -m http.server 8000
 | 英雄展示 | `#heroes` | 3D 卡片轮播，自动播放，可拖拽 / 方向键切换 |
 | 角色档案 | `#profiles` | 六位主角的档案卡，带配色强调条与冷知识 |
 | 系列年表 | `#timeline` | 8 张季封面 + 37 条年表，可切换电视动画 / 番外篇 / 大电影 / 舞台剧 |
-| 名曲馆 | `#songs` | 3 首片头曲 + 7 首片尾曲，点选后显示对应季数并转动唱片 |
+| 名曲馆 | `#songs` | 3 首片头曲 + 7 首片尾曲，点歌名即切换音源播放，唱片随之转动，一首播完自动接下一首 |
 | 荣誉墙 | `#honours` | 产业数据 + 12 项历年荣誉，来源见页脚 |
 | 趣味问答 | `#quiz` | 11 题题库随机抽 8 题，即时判分并给称号 |
 | 产品库 | `#products` | 三件神器，点击「查看详情」弹出详情弹窗 |
@@ -52,7 +54,8 @@ python -m http.server 8000
 | 春节日期表 | `ggb.js` 顶部的 `SPRING_FESTIVAL`（带 `+08:00` 时区） |
 | 问答题目 | `ggb.js` 里 `initQuiz` 的 `POOL` 数组（`correct` 是正确项下标，选项由脚本打乱；题数在 `COUNT`） |
 | 年表条目 / 分类 | `index.html` 里 `#timelineList` 的 `li.tl__item[data-kind]`，`data-kind` 取值需与 `.tab[data-filter]` 一致 |
-| 曲目列表 | `index.html` 里 `#songOp` / `#songEd` 的 `button.song[data-scope]` |
+| 曲目列表 / 试听音源 | `index.html` 里 `#songOp` / `#songEd` 的 `button.song`：曲目名与季数在 `data-scope`，音源在 `data-audio`（改这两项即可换歌） |
+| 播放器行为（自动下一首 / 音量 / 进度条） | `ggb.js` 的 `initMusic`（`VOLUME` 是默认音量） |
 | 角色档案文案 | `index.html` 里 `#profiles` 的 `.file-card` |
 | 配色 | `style.css` 顶部的 `--red` / `--gold` / `--ink-*` 变量 |
 | 首屏文案 | `index.html` 里 `#hero` 区块 |
@@ -62,13 +65,14 @@ python -m http.server 8000
 - 维基百科《猪猪侠》条目：季数、集数、曲目、人物设定的主要依据
 - [广东咏声动漫官网](https://www.winsing.net)：产业发展数据与荣誉记录
 - [哔哩哔哩番剧库](https://www.bilibili.com)：季封面图与各季上架信息
+- 哔哩哔哩上公开分享的动画原声片段：名曲馆 9 首试听音源（已转存为 `audioes/song_*.m4a`）
 
-本站为非官方粉丝展示页，封面图片版权归原权利人所有。
+本站为非官方粉丝展示页，封面图片与音频版权均归原权利人所有，音源仅作资料展示。
 
 ## 部署
 
 托管在 GitHub Pages：`main` 分支根目录，推送到 `main` 后会自动发布，通常一两分钟生效。
-页面引用了 `style.css?v=3` 和 `ggb.js?v=3`，改动这两个文件后如果线上没更新，把 `?v=` 后面的数字加一即可绕过缓存。
+页面引用了 `style.css?v=4` 和 `ggb.js?v=4`，改动这两个文件后如果线上没更新，把 `?v=` 后面的数字加一即可绕过缓存。
 
 ---
 

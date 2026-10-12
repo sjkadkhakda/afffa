@@ -9,7 +9,7 @@
 <meta property="og:title" content="猪猪侠 GG Bond · 英雄档案、系列年表与珍藏馆">
 <meta property="og:description" content="英雄档案、角色档案、十七季系列年表、名曲馆、官方数据荣誉墙与猪猪商城。">
 <link rel="icon" href="./images/猪猪侠.jpg">
-<link rel="stylesheet" href="./style.css?v=3">
+<link rel="stylesheet" href="./style.css?v=4">
 <script>
 /* 没有 JS 时页面内容依然完整可见；这里只为「滚动出现」动效做准备，
    若脚本未成功加载，2 秒后自动取消隐藏，保证任何情况下都能看到内容。 */
@@ -621,7 +621,7 @@ if ('IntersectionObserver' in window) {
                 <p class="eyebrow"><span class="eyebrow__dot"></span>SOUNDTRACK</p>
                 <h2 class="section-title">名曲馆</h2>
                 <p class="section-sub">
-                    二十年来，片头曲和片尾曲换了一首又一首。点一下歌名，看看它陪你走过了哪几季。
+                    二十年来，片头曲和片尾曲换了一首又一首。点一下歌名就能试听，看看它陪你走过了哪几季。
                 </p>
             </header>
 
@@ -629,10 +629,17 @@ if ('IntersectionObserver' in window) {
                 <div class="songs__deck">
                     <div class="vinyl" id="vinyl" aria-hidden="true"><span></span></div>
                     <div class="songs__now">
-                        <p class="songs__now-label">当前选中</p>
-                        <h3 id="songNow">超级棒棒糖</h3>
-                        <p id="songNowScope">片尾曲 · 自第 8 季开始</p>
-                        <button class="btn btn--ghost js-play-music" type="button">播放本站背景音乐</button>
+                        <p class="songs__now-label">正在播放</p>
+                        <h3 id="songNow">小英雄大肚腩</h3>
+                        <p id="songNowScope">片头曲 · 自第 5 季开始</p>
+                        <div class="player">
+                            <button class="btn btn--ghost js-play-music" type="button">▶ 播放</button>
+                            <p class="player__time"><span id="songTime">0:00</span> / <span id="songDur">--:--</span></p>
+                        </div>
+                        <div class="player__bar" id="songProgress" role="progressbar" tabindex="0"
+                             aria-label="播放进度" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+                            <span class="player__fill" id="songProgressFill"></span>
+                        </div>
                     </div>
                 </div>
 
@@ -640,26 +647,31 @@ if ('IntersectionObserver' in window) {
                     <section class="song-group">
                         <h3 class="song-group__title"><span>OP</span>片头曲</h3>
                         <ul class="song-list" id="songOp">
-                            <li><button class="song" type="button" data-scope="第 1-4 季"><span class="song__name">猪猪侠</span><span class="song__meta">第 1-4 季</span></button></li>
-                            <li><button class="song is-active" type="button" data-scope="自第 5 季开始"><span class="song__name">小英雄大肚腩</span><span class="song__meta">自第 5 季开始</span></button></li>
-                            <li><button class="song" type="button" data-scope="竞速小英雄 5-8"><span class="song__name">竞速小英雄</span><span class="song__meta">竞速小英雄 5-8</span></button></li>
+                            <li><button class="song" type="button" data-scope="第 1-4 季" data-audio="./audioes/song_zhuzhuxia.m4a"><span class="song__name">猪猪侠</span><span class="song__meta">第 1-4 季</span></button></li>
+                            <li><button class="song is-active" type="button" data-scope="自第 5 季开始" data-audio="./audioes/song_xiaoyingxiong_dudunan.m4a"><span class="song__name">小英雄大肚腩</span><span class="song__meta">自第 5 季开始</span></button></li>
+                            <li><button class="song" type="button" data-scope="竞速小英雄 5-8" data-audio="./audioes/song_jingsu.m4a"><span class="song__name">竞速小英雄</span><span class="song__meta">竞速小英雄 5-8</span></button></li>
                         </ul>
                     </section>
 
                     <section class="song-group">
                         <h3 class="song-group__title"><span>ED</span>片尾曲</h3>
                         <ul class="song-list" id="songEd">
-                            <li><button class="song" type="button" data-scope="第 1-5 季"><span class="song__name">绿色的旋律</span><span class="song__meta">第 1-5 季</span></button></li>
-                            <li><button class="song" type="button" data-scope="第 6-7 季"><span class="song__name">猪猪侠</span><span class="song__meta">第 6-7 季</span></button></li>
-                            <li><button class="song" type="button" data-scope="自第 8 季开始"><span class="song__name">超级棒棒糖</span><span class="song__meta">自第 8 季开始</span></button></li>
-                            <li><button class="song" type="button" data-scope="自竞球小英雄 3 开始"><span class="song__name">猪年吉祥</span><span class="song__meta">自竞球小英雄 3 开始</span></button></li>
-                            <li><button class="song" type="button" data-scope="超星五灵侠 1-4"><span class="song__name">勇敢的小猪</span><span class="song__meta">超星五灵侠 1-4</span></button></li>
-                            <li><button class="song" type="button" data-scope="竞速小英雄 5-8"><span class="song__name">赢自己的比赛</span><span class="song__meta">竞速小英雄 5-8</span></button></li>
-                            <li><button class="song" type="button" data-scope="超星五灵侠 5-6"><span class="song__name">功夫猪</span><span class="song__meta">超星五灵侠 5-6</span></button></li>
+                            <li><button class="song" type="button" data-scope="第 1-5 季" data-audio="./audioes/song_lvse_xuanlv.m4a"><span class="song__name">绿色的旋律</span><span class="song__meta">第 1-5 季</span></button></li>
+                            <li><button class="song" type="button" data-scope="第 6-7 季" data-audio="./audioes/song_zhuzhuxia.m4a"><span class="song__name">猪猪侠</span><span class="song__meta">第 6-7 季</span></button></li>
+                            <li><button class="song" type="button" data-scope="自第 8 季开始" data-audio="./audioes/song_chaoji_bangbangtang.m4a"><span class="song__name">超级棒棒糖</span><span class="song__meta">自第 8 季开始</span></button></li>
+                            <li><button class="song" type="button" data-scope="自竞球小英雄 3 开始" data-audio="./audioes/song_zhunian_jixiang.m4a"><span class="song__name">猪年吉祥</span><span class="song__meta">自竞球小英雄 3 开始</span></button></li>
+                            <li><button class="song" type="button" data-scope="超星五灵侠 1-4" data-audio="./audioes/song_yonggan_de_xiaozhu.m4a"><span class="song__name">勇敢的小猪</span><span class="song__meta">超星五灵侠 1-4</span></button></li>
+                            <li><button class="song" type="button" data-scope="竞速小英雄 5-8" data-audio="./audioes/song_ying_ziji_de_bisai.m4a"><span class="song__name">赢自己的比赛</span><span class="song__meta">竞速小英雄 5-8</span></button></li>
+                            <li><button class="song" type="button" data-scope="超星五灵侠 5-6" data-audio="./audioes/song_gongfuzhu.m4a"><span class="song__name">功夫猪</span><span class="song__meta">超星五灵侠 5-6</span></button></li>
                         </ul>
                     </section>
                 </div>
             </div>
+
+            <p class="source-note" data-reveal>
+                音源取自公开分享的动画原声片段（每首约 1–3.5 分钟），仅作资料展示，版权归原权利人所有；
+                一首播完会自动接着播列表里的下一首。
+            </p>
         </div>
     </section>
 
@@ -992,9 +1004,9 @@ if ('IntersectionObserver' in window) {
     <img src="./images/9.jpg" alt="" aria-hidden="true">
 </button>
 
-<!-- 背景音乐：默认不加载，点击右下角音符后才会请求音频文件 -->
-<audio id="bgMusic" loop preload="none"></audio>
+<!-- 名曲馆的播放器：默认不加载音频，点歌（或点右下角音符）后才会请求对应的 m4a -->
+<audio id="bgMusic" preload="none"></audio>
 
-<script src="ggb.js?v=3" type="text/javascript"></script>
+<script src="ggb.js?v=4" type="text/javascript"></script>
 </body>
 </html>

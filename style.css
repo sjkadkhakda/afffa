@@ -1471,6 +1471,58 @@ html.reveal [data-reveal].is-visible {
 .song.is-active .song__name { color: var(--gold-soft); }
 .song__name { font-size: .95rem; font-weight: 600; }
 .song__meta { color: var(--text-mute); font-size: .76rem; }
+.song.is-playing { border-color: rgba(245, 196, 81, .8); }
+.song.is-playing .song__name::before {
+    content: "♪";
+    margin-right: .4rem;
+    color: var(--gold);
+    animation: noteBlink 1.6s var(--ease) infinite;
+}
+@keyframes noteBlink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: .35; }
+}
+
+/* --- 名曲馆播放器 --- */
+.songs__now .player {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .9rem;
+    margin-top: 1.2rem;
+}
+.songs__now .player .btn { margin-top: 0; }
+.songs__now .player__time {
+    color: var(--text-dim);
+    font-size: .82rem;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: .04em;
+}
+.player__bar {
+    position: relative;
+    margin-top: .9rem;
+    height: 6px;
+    border-radius: 99px;
+    background: rgba(255, 255, 255, .1);
+    cursor: pointer;
+    overflow: hidden;
+}
+.player__bar:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+.player__fill {
+    display: block;
+    width: 0;
+    height: 100%;
+    border-radius: inherit;
+    background: linear-gradient(90deg, var(--red), var(--gold));
+    transition: width .2s linear;
+}
+.source-note {
+    max-width: 62ch;
+    margin-top: 2rem;
+    color: var(--text-mute);
+    font-size: .8rem;
+    line-height: 1.7;
+}
 
 /* --- 荣誉墙 --- */
 .honour-stats {
