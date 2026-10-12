@@ -1,588 +1,523 @@
-//声明计时器
-let intervalId
-let TimeintervalId
-let toTopIntervalId
-// 声明一个存储英雄的图片和名字的数组
-const arr = [
-    {url:"./images/1.jpg",p:"猪猪侠",color:"rgb(255,0,0)" ,href:"https://baike.baidu.com/item/%E7%8C%AA%E7%8C%AA%E4%BE%A0/9565890"},
-    {url:"./images/2.jpg",p:"小呆呆",color:"#1fef04" ,href:"https://baike.baidu.com/item/%E5%B0%8F%E5%91%86%E5%91%86?fromModule=lemma_search-box"},
-    {url:"./images/3.jpg",p:"超人强",color:"#0462ef" ,href:"https://baike.baidu.com/item/%E8%B6%85%E4%BA%BA%E5%BC%BA/9631566"},
-    {url:"./images/4.jpg",p:"波比",color:"#25cece" ,href:"https://baike.baidu.com/item/%E6%B3%A2%E6%AF%94/17179774?fromModule=search-result_lemma"},
-    {url:"./images/5.jpg",p:"小菲菲",color:"#ca6060" ,href:"https://baike.baidu.com/item/%E8%8F%B2%E8%8F%B2/8639357?fromModule=search-result_lemma"},
-]
-// 正面左侧面和右侧面的图片索引
-let index =0
-//获取元素
-const displayHero=document.querySelector('.displayHero')
-const front =document.querySelector('.front')
-const leftSide=document.querySelector('.leftSide')
-const rightSide=document.querySelector('.rightSide')
-const name =document.querySelector('.heroName')
-const indicators=document.querySelectorAll('.indicator')
-const alink=document.getElementById('heroLink')
-const day =document.querySelector('.dn')
-const hour =document.querySelector('.hn')
-const minute =document.querySelector('.mn')
-const second =document.querySelector('.sn')
-// 更新图片和文字的函数
-function update(){
-    front.style.backgroundImage=`url('${arr[index].url}')`
-    leftSide.style.backgroundImage=`url('${arr[(index+4)%5].url}')`
-    rightSide.style.backgroundImage=`url('${arr[(index+1)%5].url}')`
-    name.innerText=`${arr[index].p}`
-    name.href=`${arr[index].href}`
-    name.style.color=`${arr[index].color}`
-    front.addEventListener('click', function () {
-window.open(`${arr[index].href}`) ;
-});
-}// 跳转至下一个的函数
-function next(){
-    index=(index+1)%5
-    update()
-}
-// 跳转至上一个的函数
-function last(){
-    index=(index+4)%5
-    update()
-}
-//点击左右两张图片进行上下切换
-rightSide.addEventListener('click',next)
-leftSide.addEventListener('click',last)
-//给中间的图片添加跳转链接
+/* ==========================================================================
+   猪猪侠 GG Bond · 展示站交互脚本
+   功能：导航（滚动状态/进度条/锚点高亮/移动端菜单）、英雄轮播、新春倒计时、
+        商品详情弹窗、滚动出现动效、回到顶部、背景音乐开关。
+   无任何外部依赖，纯原生实现。
+   ========================================================================== */
+(function () {
+    'use strict';
 
-// 定时器
-function startNext(){
-    intervalId =setInterval(next,2000)//每两秒自动切换一次
-}
-// 清空定时器
-function stopNext(){
-    clearInterval(intervalId)
-}
-displayHero.addEventListener('mouseleave',startNext)
-displayHero.addEventListener('mouseenter',stopNext)
-//结束时间
-const end =new Date('2025-01-28T00:00:00').getTime();
-//倒计时更新函数
-function updateCountdown(){
-    const now=new Date().getTime()
-    console.log("updateCountdown is called");
-    const timeRemaining =end-now;
-    if(timeRemaining<=0){
-        alert('新年快乐！')
-    }
-    const days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
-    const hours = Math.floor((timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    const minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
-    const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
-    day.innerHTML=days.toString().padStart(2,'0')
-    hour.innerHTML=hours.toString().padStart(2,'0')
-    minute.innerHTML=minutes.toString().padStart(2,'0')
-    second.innerHTML=seconds.toString().padStart(2,'0')
-}
-//倒计时刷新函数
-function timeCountdown(){
-    TimeintervalId=setInterval(updateCountdown,1000)
-}
-window.onload = function () {
-    timeCountdown();
-};
-//回到顶部
-// 获取回到顶部按钮元素
-const backToTopButton = document.getElementById('toTop');
+    /* 通知内联脚本：js 已正常加载，滚动出现动效可以放心使用 */
+    window.__ggbRevealReady = true;
 
-// 当页面滚动时触发的函数
-window.onscroll = function () {
-// 获取当前滚动的垂直距离
-const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
-if (scrollTop > 200) {
-    // 如果滚动距离大于200px，显示回到顶部按钮
-    backToTopButton.style.display = 'block';
-} else {
-    // 否则隐藏按钮
-    backToTopButton.style.display = 'none';
-}
-};
+    var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var $ = function (sel, ctx) { return (ctx || document).querySelector(sel); };
+    var $$ = function (sel, ctx) {
+        return Array.prototype.slice.call((ctx || document).querySelectorAll(sel));
+    };
 
-// 点击回到顶部按钮时触发的函数
-backToTopButton.addEventListener('click', function () {
-        const startPosition = document.documentElement.scrollTop || document.body.scrollTop;
-        const duration = 500; // 滚动到顶部的总时长，单位毫秒，可以根据需求调整
-        let startTime = null;
+    /* ======================================================================
+       数据区：英雄与商品
+       ====================================================================== */
+    var HEROES = [
+        { name: '猪猪侠', desc: '勇敢无畏的超级英雄', color: '#ff2d2d', href: 'https://baike.baidu.com/item/猪猪侠/9565890' },
+        { name: '小呆呆', desc: '憨厚可爱的最佳伙伴', color: '#1fef04', href: 'https://baike.baidu.com/item/小呆呆' },
+        { name: '超人强', desc: '力量与速度的化身', color: '#0462ef', href: 'https://baike.baidu.com/item/超人强/9631566' },
+        { name: '波比', desc: '机智冷静的战术家', color: '#25cece', href: 'https://baike.baidu.com/item/波比/17179774' },
+        { name: '小菲菲', desc: '温柔而坚定的守护者', color: '#ca6060', href: 'https://baike.baidu.com/item/菲菲/8639357' }
+    ];
 
-        function scrollToTop(timestamp) {
-            if (!startTime) {
-                startTime = timestamp;
+    var PRODUCTS = [
+        {
+            name: '超级棒棒糖',
+            desc: '拥有神奇的力量',
+            price: '¥888',
+            img: './images/superbangbangtang.jpg',
+            tags: ['能量补给', '随身携带', '英雄同款']
+        },
+        {
+            name: '五灵锁',
+            desc: '可以变身成五种兽型战士',
+            price: '¥9999',
+            img: './images/wulingsuo.jpg',
+            tags: ['五行之力', '五种兽型', '变身神器']
+        },
+        {
+            name: '猪猪开天宝剑',
+            desc: '猪猪侠的无敌神器',
+            price: '¥9.9',
+            img: './images/baojian.jpg',
+            tags: ['开天辟地', '传说装备', '限量收藏']
+        }
+    ];
+
+    /* 春节（正月初一）日期表：倒计时自动选取下一个春节，不会因为过期而失效 */
+    var SPRING_FESTIVAL = [
+        '2027-02-06T00:00:00+08:00',
+        '2028-01-26T00:00:00+08:00',
+        '2029-02-13T00:00:00+08:00',
+        '2030-02-03T00:00:00+08:00',
+        '2031-01-23T00:00:00+08:00',
+        '2032-02-11T00:00:00+08:00',
+        '2033-01-31T00:00:00+08:00',
+        '2034-02-19T00:00:00+08:00',
+        '2035-02-08T00:00:00+08:00'
+    ];
+
+    /* ======================================================================
+       1. 导航：滚动状态、进度条、锚点高亮、移动端菜单
+       ====================================================================== */
+    (function initNav() {
+        var nav = $('#nav');
+        var links = $$('#navLinks a');
+        var toggle = $('#navToggle');
+        var progress = $('#navProgress');
+
+        if (!nav) { return; }
+
+        function onScroll() {
+            var top = window.pageYOffset || document.documentElement.scrollTop;
+            nav.classList.toggle('is-scrolled', top > 40);
+
+            if (progress) {
+                var max = document.documentElement.scrollHeight - window.innerHeight;
+                progress.style.width = (max > 0 ? Math.min(top / max, 1) * 100 : 0) + '%';
             }
-            const progress = timestamp - startTime;
-            const easeInOutQuad = function (t) {
-                return t < 0.5? 2 * t * t : -1 + (4 - 2 * t) * t;
-            };
-            const percentage = Math.min(progress / duration, 1);
-            const easedPercentage = easeInOutQuad(percentage);
-            const newPosition = startPosition * (1 - easedPercentage);
-            document.documentElement.scrollTop = newPosition;
-            document.body.scrollTop = newPosition;
-            if (progress < duration) {
-                requestAnimationFrame(scrollToTop);
+        }
+        onScroll();
+        window.addEventListener('scroll', onScroll, { passive: true });
+
+        /* 移动端菜单 */
+        function closeMenu() {
+            if (!toggle) { return; }
+            toggle.setAttribute('aria-expanded', 'false');
+            if (links.length) { links[0].parentNode.classList.remove('is-open'); }
+        }
+        if (toggle) {
+            toggle.addEventListener('click', function () {
+                var box = $('#navLinks');
+                var open = toggle.getAttribute('aria-expanded') === 'true';
+                toggle.setAttribute('aria-expanded', open ? 'false' : 'true');
+                box.classList.toggle('is-open', !open);
+            });
+            $$('#navLinks a').forEach(function (a) { a.addEventListener('click', closeMenu); });
+            document.addEventListener('click', function (e) {
+                if (!nav.contains(e.target)) { closeMenu(); }
+            });
+            document.addEventListener('keydown', function (e) {
+                if (e.key === 'Escape') { closeMenu(); }
+            });
+        }
+
+        /* 当前区块高亮 */
+        var sections = $$('main section[id]');
+        if ('IntersectionObserver' in window && sections.length) {
+            var io = new IntersectionObserver(function (entries) {
+                entries.forEach(function (entry) {
+                    if (!entry.isIntersecting) { return; }
+                    links.forEach(function (a) {
+                        a.classList.toggle('is-active', a.getAttribute('href') === '#' + entry.target.id);
+                    });
+                });
+            }, { rootMargin: '-45% 0px -50% 0px', threshold: 0 });
+            sections.forEach(function (s) { io.observe(s); });
+        }
+    })();
+
+    /* ======================================================================
+       2. 英雄轮播：居中放大 + 3D 翻转 + 自动播放 + 拖拽/键盘
+       ====================================================================== */
+    (function initCarousel() {
+        var track = $('#heroTrack');
+        var viewport = $('#heroViewport');
+        if (!track || !viewport) { return; }
+
+        var cards = $$('.hero-card', track);
+        var dotsBox = $('#heroDots');
+        var nameEl = $('#heroName');
+        var descEl = $('#heroDesc');
+        var linkEl = $('#heroLink');
+        var total = cards.length;
+        var current = 0;
+        var autoplayId = null;
+        var AUTOPLAY_MS = 4200;
+
+        /* 生成指示点 */
+        var dots = cards.map(function (card, i) {
+            if (!dotsBox) { return null; }
+            var b = document.createElement('button');
+            b.type = 'button';
+            b.setAttribute('role', 'tab');
+            b.setAttribute('aria-label', '切换到 ' + HEROES[i].name);
+            b.addEventListener('click', function () { go(i, true); });
+            dotsBox.appendChild(b);
+            return b;
+        });
+
+        function baseOffset() {
+            var cardW = cards[0].offsetWidth;
+            var styles = window.getComputedStyle(track);
+            var gap = parseFloat(styles.columnGap || styles.gap) || 24;
+            return viewport.clientWidth / 2 - cardW / 2 - current * (cardW + gap);
+        }
+
+        function render() {
+            track.style.transform = 'translate3d(' + baseOffset() + 'px, 0, 0)';
+
+            cards.forEach(function (card, i) {
+                card.classList.toggle('is-active', i === current);
+                card.classList.toggle('is-prev', i < current);
+                card.classList.toggle('is-next', i > current);
+                card.setAttribute('aria-current', i === current ? 'true' : 'false');
+                card.tabIndex = i === current ? 0 : -1;
+            });
+            dots.forEach(function (d, i) {
+                if (d) { d.classList.toggle('is-active', i === current); }
+            });
+
+            var hero = HEROES[current];
+            if (nameEl) { nameEl.textContent = hero.name; nameEl.style.color = hero.color; }
+            if (descEl) { descEl.textContent = hero.desc; }
+            if (linkEl) { linkEl.href = hero.href; }
+        }
+
+        function go(i, userAction) {
+            current = (i % total + total) % total;
+            render();
+            if (userAction) { restart(); }
+        }
+
+        /* 自动播放 */
+        function start() {
+            if (reduceMotion || total < 2) { return; }
+            stop();
+            autoplayId = window.setInterval(function () { go(current + 1); }, AUTOPLAY_MS);
+        }
+        function stop() {
+            if (autoplayId) { window.clearInterval(autoplayId); autoplayId = null; }
+        }
+        function restart() { stop(); start(); }
+
+        /* 卡片点击：非当前卡片先切换到它，当前卡片则打开百科 */
+        cards.forEach(function (card, i) {
+            card.addEventListener('click', function () {
+                if (i === current) {
+                    window.open(HEROES[i].href, '_blank', 'noopener');
+                } else {
+                    go(i, true);
+                }
+            });
+        });
+
+        var prev = $('#heroPrev');
+        var next = $('#heroNext');
+        if (prev) { prev.addEventListener('click', function () { go(current - 1, true); }); }
+        if (next) { next.addEventListener('click', function () { go(current + 1, true); }); }
+
+        /* 键盘 */
+        viewport.addEventListener('keydown', function (e) {
+            if (e.key === 'ArrowLeft') { e.preventDefault(); go(current - 1, true); }
+            if (e.key === 'ArrowRight') { e.preventDefault(); go(current + 1, true); }
+        });
+
+        /* 拖拽 / 触摸滑动 */
+        var dragging = false;
+        var startX = 0;
+        var deltaX = 0;
+        viewport.addEventListener('pointerdown', function (e) {
+            if (e.pointerType === 'mouse' && e.button !== 0) { return; }
+            dragging = true;
+            startX = e.clientX;
+            deltaX = 0;
+            viewport.classList.add('is-dragging');
+            stop();
+        });
+        viewport.addEventListener('pointermove', function (e) {
+            if (!dragging) { return; }
+            deltaX = e.clientX - startX;
+        });
+        function endDrag() {
+            if (!dragging) { return; }
+            dragging = false;
+            viewport.classList.remove('is-dragging');
+            if (Math.abs(deltaX) > 45) { go(current + (deltaX < 0 ? 1 : -1)); }
+            start();
+        }
+        viewport.addEventListener('pointerup', endDrag);
+        viewport.addEventListener('pointercancel', endDrag);
+        viewport.addEventListener('pointerleave', endDrag);
+        viewport.addEventListener('dragstart', function (e) { e.preventDefault(); });
+
+        /* 鼠标悬停 / 焦点进入时暂停自动播放 */
+        var carousel = $('#carousel');
+        if (carousel) {
+            carousel.addEventListener('mouseenter', stop);
+            carousel.addEventListener('mouseleave', start);
+            carousel.addEventListener('focusin', stop);
+            carousel.addEventListener('focusout', start);
+        }
+        document.addEventListener('visibilitychange', function () {
+            if (document.hidden) { stop(); } else { start(); }
+        });
+
+        window.addEventListener('resize', render);
+        if ('ResizeObserver' in window) { new ResizeObserver(render).observe(viewport); }
+
+        render();
+        start();
+    })();
+
+    /* ======================================================================
+       3. 新春倒计时：自动选取下一个春节
+       ====================================================================== */
+    (function initCountdown() {
+        var dayEl = $('#cdDay');
+        var hourEl = $('#cdHour');
+        var minEl = $('#cdMin');
+        var secEl = $('#cdSec');
+        var targetEl = $('#cdTarget');
+        var heroDays = $('#heroDays');
+        if (!dayEl) { return; }
+
+        function nextTarget(now) {
+            for (var i = 0; i < SPRING_FESTIVAL.length; i++) {
+                var d = new Date(SPRING_FESTIVAL[i]);
+                if (d.getTime() > now) { return d; }
+            }
+            return null;
+        }
+
+        var target = nextTarget(Date.now());
+        var finished = false;
+
+        function pad(n) { return n < 10 ? '0' + n : String(n); }
+
+        function tick() {
+            if (!target) {
+                if (targetEl) { targetEl.textContent = '春节倒计时数据已更新，敬请期待'; }
+                return;
+            }
+            var now = Date.now();
+            var left = target.getTime() - now;
+
+            if (left <= 0) {
+                dayEl.textContent = '00';
+                hourEl.textContent = '00';
+                minEl.textContent = '00';
+                secEl.textContent = '00';
+                if (heroDays) { heroDays.textContent = '0'; }
+                if (targetEl) { targetEl.textContent = '新年快乐！猪猪侠给大家拜年啦 🎉'; }
+                if (!finished) {
+                    finished = true;
+                    window.clearInterval(timer);
+                    target = nextTarget(now);
+                    if (target) { finished = false; timer = window.setInterval(tick, 1000); }
+                }
+                return;
+            }
+
+            var sec = Math.floor(left / 1000);
+            var days = Math.floor(sec / 86400);
+            var hours = Math.floor((sec % 86400) / 3600);
+            var mins = Math.floor((sec % 3600) / 60);
+            var secs = sec % 60;
+
+            dayEl.textContent = pad(days);
+            hourEl.textContent = pad(hours);
+            minEl.textContent = pad(mins);
+            secEl.textContent = pad(secs);
+            if (heroDays) { heroDays.textContent = String(days); }
+        }
+
+        var timer = window.setInterval(tick, 1000);
+
+        if (targetEl && target) {
+            targetEl.textContent = '距离 ' + target.getFullYear() + ' 年 ' +
+                (target.getMonth() + 1) + ' 月 ' + target.getDate() + ' 日 · 春节（正月初一）';
+        }
+        tick();
+    })();
+
+    /* ======================================================================
+       4. 商品详情弹窗
+       ====================================================================== */
+    (function initModal() {
+        var modal = $('#productModal');
+        if (!modal) { return; }
+
+        var panel = $('.modal__panel', modal);
+        var img = $('#modalImg');
+        var title = $('#modalTitle');
+        var desc = $('#modalDesc');
+        var tags = $('#modalTags');
+        var price = $('#modalPrice');
+        var closeBtn = $('.modal__close', modal);
+        var lastFocus = null;
+
+        function fill(i) {
+            var p = PRODUCTS[i];
+            if (!p) { return; }
+            if (img) { img.src = p.img; img.alt = p.name; }
+            if (title) { title.textContent = p.name; }
+            if (desc) { desc.textContent = p.desc; }
+            if (price) { price.textContent = p.price; }
+            if (tags) {
+                tags.innerHTML = '';
+                p.tags.forEach(function (t) {
+                    var li = document.createElement('li');
+                    li.textContent = t;
+                    tags.appendChild(li);
+                });
+            }
+        }
+
+        function open(i) {
+            fill(i);
+            lastFocus = document.activeElement;
+            modal.hidden = false;
+            window.requestAnimationFrame(function () { modal.classList.add('is-open'); });
+            document.body.style.overflow = 'hidden';
+            window.setTimeout(function () { if (closeBtn) { closeBtn.focus(); } }, 60);
+        }
+
+        function close() {
+            modal.classList.remove('is-open');
+            document.body.style.overflow = '';
+            window.setTimeout(function () { modal.hidden = true; }, reduceMotion ? 0 : 340);
+            if (lastFocus && lastFocus.focus) { lastFocus.focus(); }
+        }
+
+        $$('.js-detail').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                open(parseInt(btn.getAttribute('data-product'), 10) || 0);
+            });
+        });
+
+        $$('[data-close]', modal).forEach(function (el) {
+            el.addEventListener('click', close);
+        });
+
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape' && modal.hidden === false) { close(); }
+        });
+
+        /* 焦点循环，避免 Tab 跑到弹窗外面 */
+        modal.addEventListener('keydown', function (e) {
+            if (e.key !== 'Tab' || !panel) { return; }
+            var focusables = $$('button, [href], input, select, textarea', panel)
+                .filter(function (el) { return !el.disabled; });
+            if (!focusables.length) { return; }
+            var first = focusables[0];
+            var last = focusables[focusables.length - 1];
+            if (e.shiftKey && document.activeElement === first) {
+                e.preventDefault(); last.focus();
+            } else if (!e.shiftKey && document.activeElement === last) {
+                e.preventDefault(); first.focus();
+            }
+        });
+    })();
+
+    /* ======================================================================
+       5. 滚动出现动效
+       ====================================================================== */
+    (function initReveal() {
+        var items = $$('[data-reveal]');
+        if (!items.length) { return; }
+
+        if (!('IntersectionObserver' in window) || reduceMotion) {
+            items.forEach(function (el) { el.classList.add('is-visible'); });
+            return;
+        }
+
+        var io = new IntersectionObserver(function (entries) {
+            entries.forEach(function (entry) {
+                if (!entry.isIntersecting) { return; }
+                entry.target.classList.add('is-visible');
+                io.unobserve(entry.target);
+            });
+        }, { rootMargin: '0px 0px -10% 0px', threshold: 0.08 });
+
+        items.forEach(function (el, i) {
+            /* 同组内的元素做一点错开的延迟，看起来更自然 */
+            if (el.parentNode && el.parentNode.classList.contains('shop-grid')) {
+                el.style.transitionDelay = (i % 3) * 0.09 + 's';
+            }
+            io.observe(el);
+        });
+    })();
+
+    /* ======================================================================
+       6. 回到顶部
+       ====================================================================== */
+    (function initToTop() {
+        var btn = $('#toTop');
+        if (!btn) { return; }
+
+        function onScroll() {
+            var top = window.pageYOffset || document.documentElement.scrollTop;
+            btn.classList.toggle('is-show', top > 400);
+        }
+        onScroll();
+        window.addEventListener('scroll', onScroll, { passive: true });
+
+        btn.addEventListener('click', function () {
+            window.scrollTo({ top: 0, behavior: reduceMotion ? 'auto' : 'smooth' });
+        });
+    })();
+
+    /* ======================================================================
+       7. 背景音乐开关（默认不加载音频，点击后才开始下载）
+       ====================================================================== */
+    (function initMusic() {
+        var btn = $('#musicToggle');
+        var audio = $('#bgMusic');
+        if (!btn || !audio) { return; }
+
+        /* 仓库里的音乐文件名本身带一个空格，且扩展名是 .mp4（纯音频容器），保持原样引用 */
+        var MUSIC_SRC = './audioes/1401568647-1-192 .mp4';
+        var ready = false;
+
+        function sync() {
+            var playing = !audio.paused && !audio.ended;
+            btn.classList.toggle('is-on', playing);
+            btn.setAttribute('aria-pressed', playing ? 'true' : 'false');
+            btn.setAttribute('aria-label', playing ? '暂停背景音乐' : '播放背景音乐');
+        }
+
+        btn.addEventListener('click', function () {
+            if (!ready) {
+                audio.src = MUSIC_SRC;
+                audio.volume = 0.35;
+                ready = true;
+                audio.load();
+            }
+            if (audio.paused) {
+                var p = audio.play();
+                if (p && p.catch) { p.catch(function () { sync(); }); }
             } else {
-                document.documentElement.scrollTop = 0;
-                document.body.scrollTop = 0;
+                audio.pause();
             }
+        });
+
+        audio.addEventListener('play', sync);
+        audio.addEventListener('pause', sync);
+        audio.addEventListener('ended', sync);
+        sync();
+    })();
+
+    /* ======================================================================
+       8. 首屏视频：尊重「减少动态效果」偏好
+       ====================================================================== */
+    (function initHeroVideo() {
+        var video = $('.hero__video');
+        if (!video) { return; }
+        if (reduceMotion) {
+            video.removeAttribute('autoplay');
+            video.pause();
+            return;
         }
-        requestAnimationFrame(scrollToTop);
-    });
-    //获取产品库元素
-    var productImgs=document.querySelectorAll('.product-item-img')
-    var productShadow=document.querySelectorAll('.product-item-shadow')
-    var infoDetails=document.querySelectorAll('.info-detail')
-    var infotitles=document.querySelectorAll('.info-title')
-    //产品库
-    var productData=[
-        {img:'./images/superbangbangtang.jpg',imgShadow:'./images/superbangbangtangshadow.jpg', productName:'超级棒棒糖',introduce:'拥有神奇的力量', price:888},
-        {img:'./images/wulingsuo.jpg',imgShadow:'./images/wulingsuoshadow.jpg', productName:'五灵锁',introduce:'可以变身成五种兽型战士', price:9999},
-        {img:'./images/baojian.jpg',imgShadow:'./images/wulingsuoshadow.jpg', productName:'猪猪开天宝剑',introduce:'猪猪侠的无敌神器', price:9.9},
-    ]
-    //修改产品库的背景
-    productImgs[0].style.background=`url('${productData[0].img}')`
-    productImgs[1].style.background=`url('${productData[1].img}')`
-    productImgs[2].style.background=`url('${productData[2].img}')`
-    productShadow[0].style.background=`url('${productData[0].imgShadow}')`
-    productShadow[1].style.background=`url('${productData[1].imgShadow}')`
-    productShadow[2].style.background=`url('${productData[2].imgShadow}')`
-    infotitles[0].innerText=`${productData[0].productName}`
-    infoDetails[0].innerText=`${productData[0].introduce}`
-    infotitles[1].innerText=`${productData[1].productName}`
-    infoDetails[1].innerText=`${productData[1].introduce}`
-    infotitles[2].innerText=`${productData[2].productName}`
-    infoDetails[2].innerText=`${productData[2].introduce}`
-    //修改导航栏在不同位置的颜色和透明情况
-    var menu =document.querySelector('.menu')
-    var head =document.querySelector('.head')
-    var headHeight=head.offsetHeight;
-    var headTop=head.offsetTop;
-    var menuItems=document.querySelectorAll('.menu-item')
-    var menuCurrent=document.querySelector('.menu-current')
-    var logo=document.querySelector('.logo')
-    var TitleSignin=document.querySelector('.menu-title-signin')
-    var blackBlock=document.querySelector('.menu-title-black-block')
-    var hrs =document.querySelector('.hrs')
-    var selections =document.querySelector('.selection')
-    function wenZi() {
-    var selections = document.querySelectorAll('.selection');
-    var hrs = document.querySelectorAll('.hr');
-    selections.forEach(function (selections, index) {
-    var sectionTop = selections.offsetTop;
-    var sectionHeight = selections.offsetHeight;
-    if (window.pageYOffset >= sectionTop && window.pageYOffset < sectionTop + sectionHeight) {
-        hrs[index].style.color='rgba(255, 0, 0, 1)'
-        hrs[index].style.fontSize=" 20px";
-        hrs[index].style.marginTop=" 28px";
-        hrs[index].style.fontWeight=" bolder";
-        hrs[index].style.letterSpacing=" 2.5px";
-        
-    } else {
-        hrs[index].style.color='rgba(100, 100, 100, 1)'
-        hrs[index].style.fontWeight=" normal";
-        hrs[index].style.fontSize=" 15px";
-        hrs[index].style.marginTop=" 33px";
-        hrs[index].style.letterSpacing=" 0px";
-        
-    }
-   
-});
-}
-    function nav(){
-        if (window.pageYOffset>headHeight){
-            menu.style.backgroundColor='rgba(255, 255, 255, 1)'
-            logo.src='./images/logo2.png'
-            TitleSignin.style.color="black"
-            blackBlock.style.color="white"
-            blackBlock.style.backgroundColor="black"
-            
-        }else{
-            menu.style.backgroundColor='rgba(255, 255, 255, 0.0)'
-            logo.src='./images/logo.png'
-            TitleSignin.style.color="white"
-            blackBlock.style.color="black"
-            blackBlock.style.backgroundColor="white"
-            
-        }
-        
-    }
-    
-    
-    window.addEventListener('scroll',wenZi);
-    window.addEventListener('scroll',nav)
-    //给导航栏每个元素添加事件
-    menuItems.forEach(function(menuItem){
-        menuItem.addEventListener('mouseenter',function(){
-            menuItem.style.letterSpacing='5px'
-            if (window.pageYOffset>headHeight){
-                menuItem.style.color='rgba(255,0, 0, 1)'
-            }
-        })
-        menuItem.addEventListener('mouseleave',function(){
-            menuItem.style.letterSpacing='0px'
-            if (window.pageYOffset>headHeight){
-                menuItem.style.color='rgba(100, 100, 100,1)'
-            }else{
-                menuItem.style.color='rgba(200, 200, 200, 1)'
-            }
-        })
-    })
-//登录弹窗
-//获取弹窗元素
-var loginButton=document.querySelector('.menu-title-signin')
-var menuTitleBlackBlock=document.querySelector('.menu-title-black-block')
-var login=document.querySelector('.login')
-var coverPage=document.querySelector('.cover-page')
-var x=document.querySelector('.x')
-var loginTab=document.querySelector('.login-tab')
-var enrollTab=document.querySelector('.enroll-tab')
-var loginUser=document.querySelector('.login-user')
-var enrollEnsurePassword=document.querySelector('.enroll-ensurePassword')
-var loginBotton=document.querySelector('.login-botton')
-var enrollBotton=document.querySelector('.enroll-botton')
-var loginTabSelect=document.querySelector('.login-tab-select')
-var loginTabTabSelect=document.querySelector('.login-tab-tab-select')
-var loginImage=document.querySelector('.login-image')
-var loginLogo=document.querySelector('.login-logo')
-var loginVerify=document.querySelector('.loginVerify')
-var enrollVerify=document.querySelector('.enrollVerify')
-var UserAvatar=document.querySelector('.UserAvatar')
-var clearInputX=document.querySelector('.clearInputX')
+        var p = video.play();
+        if (p && p.catch) { p.catch(function () { /* 浏览器拦截自动播放时保留海报图 */ }); }
+    })();
 
-
-var imagesIndex=1
-var logoIndex=1
-var EnrollIndex=0
-var loginIndex=1
-var logedIndex=0
-
-
-
-//切换注册界面时，登录元素消失
-function openEnrollPage(){
-clearInput()
-enrollBotton.style.display='block'
-enrollEnsurePassword.style.display='block'
-loginTabTabSelect.style.backgroundColor='black'
-loginBotton.style.display='none'
-loginTabSelect.style.backgroundColor='white'
-loginTab.style.color='rgba(200,200,200,1)'
-enrollTab.style.color='rgba(0,0,0,1)'
-EnrollIndex=1
-loginIndex=0
-}
-//切换登录界面时，注册元素消失
-function openLoginPage(){
-clearInput()
-loginTabTabSelect.style.backgroundColor='white'
-enrollBotton.style.display='none'
-enrollEnsurePassword.style.display='none'
-loginTabSelect.style.backgroundColor='black'
-loginBotton.style.display='block'
-loginTab.style.color='rgba(0,0,0,1)'
-enrollTab.style.color='rgba(200,200,200,1)'
-EnrollIndex=0
-loginIndex=1
-}
-loginTab.addEventListener('click',openLoginPage)
-enrollTab.addEventListener('click',openEnrollPage)
-//登录页面弹出函数
-function loginPage(){
-login.style.display="block"
-coverPage.style.display="block"
-document.body.style.overflow="hidden"
-}
-//登陆页面关闭寒素
-function closeLoginPage(){
-login.style.display="none"
-coverPage.style.display="none"
-document.body.style.overflow="auto"
-}
-//点击登录时，登录页面弹出，遮罩显现
-loginButton.addEventListener('click',function(){
-loginPage()
-openLoginPage()
-})
-//点击注册时，登录页面弹出，遮罩显现
-menuTitleBlackBlock.addEventListener('click',function(){
-loginPage()
-openEnrollPage()
-})
-//点击x时，登录页面消失，遮罩消失
-x.addEventListener('click',closeLoginPage)
-//点击图片进行更换
-loginImage.addEventListener('click',function(){
-if (imagesIndex===1) {
-    loginImage.src='./images/bqb02.gif'
-    imagesIndex=2
-}else if(imagesIndex===2){
-loginImage.src='./images/bqb03.gif'
-    imagesIndex=3
-}else if(imagesIndex===3){
-loginImage.src='./images/bqb04.gif'
-    imagesIndex=4
-}else{
-    imagesIndex=1
-loginImage.src='./images/bqb01.gif'
-}
-})
-loginLogo.addEventListener('click',function(){
-if(logoIndex===1){
-    loginLogo.src='./images/logo.png'
-    logoIndex=2
-}else if(logoIndex==2){
-    loginLogo.src='./images/logo2.png'
-    logoIndex=1
-}
-})
-//用户登录时的用户头像出现
-function logged(){
-UserAvatar.style.display='block'
-TitleSignin.style.display='none'
-blackBlock.style.display='none'
-logedIndex=1
-}
-function notLogged(){
-UserAvatar.style.display='none'
-TitleSignin.style.display='block'
-blackBlock.style.display='block'
-logedIndex=0
-}
-// 存储用户数据数组
-function storeUserArray(key, userArray) {
-localStorage.setItem(key, JSON.stringify(userArray));
-}
-
-//存储用户数组
-var users = [
-{ userName: "TJW", Password: "123456" },
-{ userName: "ZXJ", Password: "123456" }
-];
-storeUserArray('users', users);
-/// 检索用户数据数组
-function getUserArray(key) {
-var userArray = localStorage.getItem(key);
-    if (userArray) {
-        return JSON.parse(userArray);
-     }
-return null; // 如果没有找到数据，返回null
-}
-
-//更改用户信息函数
-var dropdownUsername=document.querySelector('.dropdownUsername')
-function changeInformation(userName){
-dropdownUsername.innerText=`${userName}`
-}
-//清空input内容函数
-function clearInput(){
-var inputs=document.querySelectorAll('.input')
-inputs.forEach(function(input){
-    input.value=''
-})
-}
-clearInputX.addEventListener('click',function(){
-clearInput()
-})
-
-//注册合法验证
-enrollBotton.addEventListener('click',function(){
-var input=document.querySelectorAll('.input')
-var userName=input[0].value
-var Password=input[1].value
-var EnsurePasswd=input[2].value
-if(userName.split('').length=='0'){
-    enrollVerify.innerText="请输入用户名"
-    enrollVerify.classList.add('show');
-}else if(userName.split('').length<3||userName.split('').length>=16){
-    enrollVerify.innerText="用户名长度为3-16字符"
-    enrollVerify.classList.add('show');
-}else if(Password.split('').length===0){
-    enrollVerify.innerText="请输入密码"
-    enrollVerify.classList.add('show');
-}else if(Password.split('').length<6||Password.split('').length>16){
-    enrollVerify.innerText="密码长度为6-16字符"
-    enrollVerify.classList.add('show');
-}else if(EnsurePasswd.split('').length===0){
-    enrollVerify.innerText="请确认密码"
-    enrollVerify.classList.add('show');
-}else if(EnsurePasswd!=Password){
-    enrollVerify.innerText="确认密码失败"
-    enrollVerify.classList.add('show');
-}else{
-    enrollVerify.innerText="注册成功"
-    enrollVerify.classList.add('show');
-    users.push({userName,Password})
-    closeLoginPage()
-    logged()
-    clearInput()
-    changeInformation(userName)
-}
-
-if (enrollVerify.classList.contains('show')) {
-setTimeout(function() {
-    enrollVerify.classList.remove('show');
-}, 1000); 
-}
-
-} )
-//登录事件
-loginBotton.addEventListener('click',function(){
-var input=document.querySelectorAll('.input')
-var userName=input[0].value
-var Password=input[1].value
-var user = users.find(u => u.userName === userName && u.Password === Password);
-if(user){
-    loginVerify.innerText="登录成功"
-    loginVerify.classList.add('loginVerifyShow');
-    closeLoginPage()
-    logged()
-    clearInput()
-    changeInformation(userName)
-}else{
-    loginVerify.innerText="登录失败"
-    loginVerify.classList.add('loginVerifyShow');
-}
-
-if (loginVerify.classList.contains('loginVerifyShow')) {
-setTimeout(function() {
-    loginVerify.classList.remove('loginVerifyShow');
-}, 1000); 
-}
-console.log(users)
-
-} )
-
-//用户头像下拉展示用户信息
-var hideTimer
-var dropdownContent=document.querySelector('.dropdown-content')
-UserAvatar.addEventListener('mouseover',function(){
-dropdownContent.style.display='block'
-dropdownContent.classList.add('show-dropdown')
-})
-UserAvatar.addEventListener('mouseout',function(){
-hideTimer = setTimeout(function() {
-dropdownContent.classList.remove('show-dropdown')
-dropdownContent.style.display = 'none';
-}, 250); // 250ms的延迟
-})
-// 当鼠标在下拉内容上时，清除计时器，防止下拉菜单关闭
-dropdownContent.addEventListener('mouseover', function(event) {
-clearTimeout(hideTimer);
-});
-
-// 当鼠标从下拉内容移出时，重新开始计时
-dropdownContent.addEventListener('mouseout', function(event) {
-event.stopPropagation(); // 防止冒泡到.dropdown的mouseout事件
-hideTimer = setTimeout(function() {
-dropdownContent.classList.remove('show-dropdown')
-dropdownContent.style.display = 'none';
-}, 250); // 250ms的延迟
-});
-
-//退出登录
-var SignOut=document.querySelector('.SignOut')
-SignOut.addEventListener('click',function(){
-dropdownContent.style.display = 'none';
-notLogged() 
-marketToHead()
-})
-
-//获取商城元素
-var market=document.querySelector('.market')
-var indexPage=document.querySelector('.index')
-var productPage=document.querySelector('.product-page')
-var purchasePage=document.querySelector('.purchase')
-var product=document.querySelectorAll('.product')
-var commodityImgs =document.querySelectorAll('.product-img')
-var commodityNames =document.querySelectorAll('.product-name')
-var commodityPrices =document.querySelectorAll('.product-price')
-var purchaseProduct =document.querySelector('.purchase-product')
-var purchaseShow =document.querySelector('.purchase-show')
-var purchaseLens =document.querySelector('.purchase-lens')
-var purchaseName =document.querySelector('.purchase-name')
-var purchasePrice =document.querySelector('.purchase-price')
-//跳转到商城界面方法
-function headToMarket(){
-    if (logedIndex===0){
-        loginPage()
-    }else{
-    market.style.display='block'
-    indexPage.style.display='none'
-    menuItems[4].classList.add('active')
-    purchasePage.style.display='none'
-    productPage.style.display='flex'
-    }
-}
-//跳转到首页界面方法
-function marketToHead(){
-    market.style.display='none'
-    indexPage.style.display='block'
-    menuItems[4].classList.remove('active')
-}
-//跳转到购买页方法
-function Topurchase(){
-    headToMarket()
-    purchasePage.style.display='flex'
-    productPage.style.display='none'
-}
-//添加跳转事件
-for(let i=0;i<4;i++){
-        menuItems[i].addEventListener('click',marketToHead)
-}
-//给猪猪商城和产品库都添加上跳转事件
-menuItems[4].addEventListener('click',headToMarket)
-//商品购买界面信息上传
-//上传商城商品信息
-for (let i=0;i<commodityImgs.length;i++){
-    commodityImgs[i].src=`${productData[i].img}`
-    commodityNames[i].innerText=`${productData[i].productName+" "+productData[i].introduce}`
-    commodityPrices[i].innerText=`¥${productData[i].price}`
-    product[i].addEventListener('click',function(){
-        purchaseProduct.src=`${productData[i].img}`
-        purchaseShow.src=`${productData[i].img}`
-        purchaseName.innerText=`${productData[i].productName+" "+productData[i].introduce}`
-        purchasePrice.innerText=`¥${productData[i].price}`
-        Topurchase()
-    })
-}
-// 图片放大镜
-purchaseShow.addEventListener('mousemove', function(event) {
-    var imgRect = purchaseShow.getBoundingClientRect();
-    var x = event.clientX - imgRect.left;
-    var y = event.clientY - imgRect.top;
-    
-    // 确保放大镜不会超出图片边界
-    if (x < 0 || x > imgRect.width || y < 0 || y > imgRect.height) {
-        purchaseLens.style.display = 'none';
-        return;
-    }
-
-    // 计算放大镜相对于图片的位置
-    var magnifierX = x - (purchaseLens.offsetWidth / 2);
-    var magnifierY = y - (purchaseLens.offsetHeight / 2);
-
-    // 设置放大镜的位置
-    purchaseLens.style.left = magnifierX + 'px';
-    purchaseLens.style.top = magnifierY + 'px';
-    purchaseLens.style.display = 'block';
-
-    // 设置放大镜的背景图片
-    purchaseLens.style.backgroundImage = 'url(' + purchaseShow.src + ')';
-
-    // 设置背景图片的大小，这里假设放大镜显示的是图片的2倍大小
-    purchaseLens.style.backgroundSize = (purchaseShow.width * 2) + 'px ' + (purchaseShow.height * 2) + 'px';
-
-    // 设置背景图片的位置，这里根据鼠标的位置来计算
-    purchaseLens.style.backgroundPosition = (-x * 2) + 'px ' + (-y * 2) + 'px';
-});
-
-purchaseShow.addEventListener('mouseout', function() {
-    purchaseLens.style.display = 'none';
-});
-
-
-
-
+})();
