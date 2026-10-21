@@ -4,12 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>猪猪侠 GG Bond · 英雄档案、系列年表与珍藏馆</title>
-<meta name="description" content="猪猪侠（GG Bond）主题展示站：五位英雄档案、角色档案、十七季系列年表、名曲馆、官方数据荣誉墙、神器产品库、新春倒计时与猪猪商城。">
+<meta name="description" content="猪猪侠（GG Bond）主题展示站：五位英雄档案、角色档案、十七季系列年表、名曲馆、神器产品库、荣誉墙、猪猪商城、趣味问答与新春倒计时。">
 <meta name="theme-color" content="#0b0d12">
 <meta property="og:title" content="猪猪侠 GG Bond · 英雄档案、系列年表与珍藏馆">
-<meta property="og:description" content="英雄档案、角色档案、十七季系列年表、名曲馆、官方数据荣誉墙与猪猪商城。">
+<meta property="og:description" content="英雄档案、角色档案、十七季系列年表、名曲馆、荣誉墙、猪猪商城与趣味问答。">
 <link rel="icon" href="./images/猪猪侠.jpg">
-<link rel="stylesheet" href="./style.css?v=4">
+<link rel="stylesheet" href="./style.css?v=5">
 <script>
 /* 没有 JS 时页面内容依然完整可见；这里只为「滚动出现」动效做准备，
    若脚本未成功加载，2 秒后自动取消隐藏，保证任何情况下都能看到内容。 */
@@ -39,10 +39,12 @@ if ('IntersectionObserver' in window) {
             <a href="#profiles">角色档案</a>
             <a href="#timeline">系列年表</a>
             <a href="#songs">名曲馆</a>
+            <a href="#products">产品库</a>
             <a href="#honours">荣誉墙</a>
-            <a href="#quiz">趣味问答</a>
             <a href="#shop">猪猪商城</a>
-        </nav>
+            <a href="#quiz">趣味问答</a>
+            <a href="#festival">新春倒计时</a>
+</nav>
         <button class="nav__toggle" id="navToggle" type="button"
                 aria-label="展开菜单" aria-expanded="false" aria-controls="navLinks">
             <span></span><span></span><span></span>
@@ -794,44 +796,6 @@ if ('IntersectionObserver' in window) {
         </div>
     </section>
 
-    <!-- ============ 新春倒计时 ============ -->
-    <section class="section section--festival" id="festival">
-        <img class="lantern lantern--left" src="./images/downlink.jpg" alt="" aria-hidden="true" loading="lazy" decoding="async">
-        <img class="lantern lantern--right" src="./images/uplink.jpg" alt="" aria-hidden="true" loading="lazy" decoding="async">
-
-        <div class="wrap festival__inner">
-            <header class="section-head section-head--center" data-reveal>
-                <p class="eyebrow"><span class="eyebrow__dot"></span>SPRING FESTIVAL</p>
-                <img class="festival__banner" src="./images/happyNewYear.png" alt="新春快乐" loading="lazy" decoding="async">
-                <p class="section-sub">猪猪侠提醒您，距离过年还有</p>
-            </header>
-
-            <div class="countdown" id="countdown" data-reveal>
-                <div class="countdown__cell">
-                    <span class="countdown__num" id="cdDay">00</span>
-                    <span class="countdown__unit">天</span>
-                </div>
-                <div class="countdown__sep">:</div>
-                <div class="countdown__cell">
-                    <span class="countdown__num" id="cdHour">00</span>
-                    <span class="countdown__unit">时</span>
-                </div>
-                <div class="countdown__sep">:</div>
-                <div class="countdown__cell">
-                    <span class="countdown__num" id="cdMin">00</span>
-                    <span class="countdown__unit">分</span>
-                </div>
-                <div class="countdown__sep">:</div>
-                <div class="countdown__cell">
-                    <span class="countdown__num" id="cdSec">00</span>
-                    <span class="countdown__unit">秒</span>
-                </div>
-            </div>
-
-            <p class="festival__target" id="cdTarget" data-reveal>春节倒计时加载中…</p>
-        </div>
-    </section>
-
     <!-- ============ 猪猪商城 ============ -->
     <section class="section section--shop" id="shop">
         <div class="wrap">
@@ -933,6 +897,44 @@ if ('IntersectionObserver' in window) {
         </div>
     </section>
 
+    <!-- ============ 新春倒计时 ============ -->
+    <section class="section section--festival" id="festival">
+        <img class="lantern lantern--left" src="./images/downlink.jpg" alt="" aria-hidden="true" loading="lazy" decoding="async">
+        <img class="lantern lantern--right" src="./images/uplink.jpg" alt="" aria-hidden="true" loading="lazy" decoding="async">
+
+        <div class="wrap festival__inner">
+            <header class="section-head section-head--center" data-reveal>
+                <p class="eyebrow"><span class="eyebrow__dot"></span>SPRING FESTIVAL</p>
+                <img class="festival__banner" src="./images/happyNewYear.png" alt="新春快乐" loading="lazy" decoding="async">
+                <p class="section-sub">猪猪侠提醒您，距离过年还有</p>
+            </header>
+
+            <div class="countdown" id="countdown" data-reveal>
+                <div class="countdown__cell">
+                    <span class="countdown__num" id="cdDay">00</span>
+                    <span class="countdown__unit">天</span>
+                </div>
+                <div class="countdown__sep">:</div>
+                <div class="countdown__cell">
+                    <span class="countdown__num" id="cdHour">00</span>
+                    <span class="countdown__unit">时</span>
+                </div>
+                <div class="countdown__sep">:</div>
+                <div class="countdown__cell">
+                    <span class="countdown__num" id="cdMin">00</span>
+                    <span class="countdown__unit">分</span>
+                </div>
+                <div class="countdown__sep">:</div>
+                <div class="countdown__cell">
+                    <span class="countdown__num" id="cdSec">00</span>
+                    <span class="countdown__unit">秒</span>
+                </div>
+            </div>
+
+            <p class="festival__target" id="cdTarget" data-reveal>春节倒计时加载中…</p>
+        </div>
+    </section>
+
 </main>
 
 <!-- ============ 页脚 ============ -->
@@ -950,10 +952,10 @@ if ('IntersectionObserver' in window) {
             <a href="#songs">名曲馆</a>
             <a href="#products">产品库</a>
             <a href="#honours">荣誉墙</a>
-            <a href="#festival">新春快乐</a>
             <a href="#shop">猪猪商城</a>
             <a href="#quiz">趣味问答</a>
-        </nav>
+            <a href="#festival">新春倒计时</a>
+</nav>
     </div>
     <div class="wrap footer__credit">
         <hr>
@@ -1007,6 +1009,6 @@ if ('IntersectionObserver' in window) {
 <!-- 名曲馆的播放器：默认不加载音频，点歌（或点右下角音符）后才会请求对应的 m4a -->
 <audio id="bgMusic" preload="none"></audio>
 
-<script src="ggb.js?v=4" type="text/javascript"></script>
+<script src="ggb.js?v=5" type="text/javascript"></script>
 </body>
 </html>

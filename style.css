@@ -1767,19 +1767,7 @@ html.reveal [data-reveal].is-visible {
 
 /* ---------- 15. 响应式 ---------- */
 @media (max-width: 1080px) {
-    .hero__inner { grid-template-columns: 1fr; gap: 2rem; }
-    .hero__emblem { order: -1; }
-    .hero__emblem img { width: min(260px, 52vw); }
-    .hero__glow { width: min(320px, 62vw); }
-    .product-row { grid-template-columns: 1fr; gap: 2.5rem; }
-    .product-row--reverse .product-row__media { order: 0; }
-    .product-row__no { font-size: 3rem; }
-    .shop-grid { grid-template-columns: repeat(2, 1fr); }
-}
-
-@media (max-width: 820px) {
-    :root { --gutter: 1.25rem; }
-
+    /* 导航项较多（10 个链接），1080px 以下收进汉堡菜单，避免挤压换行 */
     .nav__toggle { display: block; }
     .nav.is-scrolled { background: rgba(9, 10, 15, .92); }
     .nav__links {
@@ -1806,6 +1794,19 @@ html.reveal [data-reveal].is-visible {
     .nav__links a { padding: .75rem 1rem; border-radius: 10px; }
     .nav__links a.is-active { background: rgba(230, 34, 31, .16); }
     .nav__links a::after { display: none; }
+
+    .hero__inner { grid-template-columns: 1fr; gap: 2rem; }
+    .hero__emblem { order: -1; }
+    .hero__emblem img { width: min(260px, 52vw); }
+    .hero__glow { width: min(320px, 62vw); }
+    .product-row { grid-template-columns: 1fr; gap: 2.5rem; }
+    .product-row--reverse .product-row__media { order: 0; }
+    .product-row__no { font-size: 3rem; }
+    .shop-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 820px) {
+    :root { --gutter: 1.25rem; }
 
     .hero { padding-top: calc(var(--nav-h) + 2rem); }
     .hero__stats { gap: 1.8rem; }
