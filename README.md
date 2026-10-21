@@ -23,7 +23,7 @@ python -m http.server 8000
 ├── index.html          # 页面结构（单页，锚点导航）
 ├── style.css           # 全部样式，按 16 个区块分段注释
 ├── ggb.js              # 全部交互：轮播 / 倒计时 / 弹窗 / 年表 / 名曲馆播放器 / 问答 / 动效
-├── images/             # 图片素材（含 8 张季封面）
+├── images/             # 图片素材（含 22 张季封面 / 番外封面）
 ├── audioes/            # 9 首歌曲音源（song_*.m4a，共约 9 MB，默认不加载，点歌才下载）
 └── vedioes/            # 首屏背景视频
 ```
@@ -37,7 +37,7 @@ python -m http.server 8000
 | 首屏 | `#hero` | 视频背景 + 主视觉，右下角是滚动提示 |
 | 英雄展示 | `#heroes` | 3D 卡片轮播，自动播放，可拖拽 / 方向键切换 |
 | 角色档案 | `#profiles` | 六位主角的档案卡，带配色强调条与冷知识 |
-| 系列年表 | `#timeline` | 8 张季封面 + 37 条年表，可切换电视动画 / 番外篇 / 大电影 / 舞台剧 |
+| 系列年表 | `#timeline` | 22 张季封面 / 番外封面（按播出顺序）+ 37 条年表，可切换电视动画 / 番外篇 / 大电影 / 舞台剧 |
 | 名曲馆 | `#songs` | 3 首片头曲 + 7 首片尾曲，点歌名即切换音源播放，唱片随之转动，一首播完自动接下一首 |
 | 产品库 | `#products` | 三件神器，点击「查看详情」弹出详情弹窗 |
 | 荣誉墙 | `#honours` | 产业数据 + 12 项历年荣誉，来源见页脚 |
@@ -56,6 +56,7 @@ python -m http.server 8000
 | 春节日期表 | `ggb.js` 顶部的 `SPRING_FESTIVAL`（带 `+08:00` 时区） |
 | 问答题目 | `ggb.js` 里 `initQuiz` 的 `POOL` 数组（`correct` 是正确项下标，选项由脚本打乱；题数在 `COUNT`） |
 | 年表条目 / 分类 | `index.html` 里 `#timelineList` 的 `li.tl__item[data-kind]`，`data-kind` 取值需与 `.tab[data-filter]` 一致 |
+| 封面墙 | `index.html` 里 `#timeline .covers` 的 `figure.cover`（`<img>` 是竖版海报，`<figcaption>` 是剧名与季数）；图片统一按 3:4 裁切，建议 560×747，脚本见 `_covers_build.py` |
 | 曲目列表 / 试听音源 | `index.html` 里 `#songOp` / `#songEd` 的 `button.song`：曲目名与季数在 `data-scope`，音源在 `data-audio`（改这两项即可换歌） |
 | 播放器行为（自动下一首 / 音量 / 进度条） | `ggb.js` 的 `initMusic`（`VOLUME` 是默认音量） |
 | 角色档案文案 | `index.html` 里 `#profiles` 的 `.file-card` |
@@ -66,7 +67,9 @@ python -m http.server 8000
 
 - 维基百科《猪猪侠》条目：季数、集数、曲目、人物设定的主要依据
 - [广东咏声动漫官网](https://www.winsing.net)：产业发展数据与荣誉记录
-- [哔哩哔哩番剧库](https://www.bilibili.com)：季封面图与各季上架信息
+- [哔哩哔哩番剧库](https://www.bilibili.com)：番外篇封面（拼装特工队 / 环球日记）与各季上架信息
+- [豆瓣电影](https://movie.douban.com)：第 2–4、6–9 季、特别篇《终极决战前夜篇》与竞速小英雄 5 的海报原图
+- [优酷](https://www.youku.com) / [360 百科图库](https://baike.so.com)：第 5 季《积木世界的童话故事》、第 1 季《魔幻猪猡纪》封面
 - 哔哩哔哩上公开分享的动画原声片段：名曲馆 9 首试听音源（已转存为 `audioes/song_*.m4a`）
 
 本站为非官方粉丝展示页，封面图片与音频版权均归原权利人所有，音源仅作资料展示。
@@ -74,7 +77,7 @@ python -m http.server 8000
 ## 部署
 
 托管在 GitHub Pages：`main` 分支根目录，推送到 `main` 后会自动发布，通常一两分钟生效。
-页面引用了 `style.css?v=5` 和 `ggb.js?v=5`，改动这两个文件后如果线上没更新，把 `?v=` 后面的数字加一即可绕过缓存。
+页面引用了 `style.css?v=6` 和 `ggb.js?v=6`，改动这两个文件后如果线上没更新，把 `?v=` 后面的数字加一即可绕过缓存。
 
 ---
 

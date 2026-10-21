@@ -1255,8 +1255,11 @@ html.reveal [data-reveal].is-visible {
     transition: transform .5s var(--ease), border-color .5s var(--ease), box-shadow .5s var(--ease);
 }
 .cover img {
+    display: block;
     width: 100%;
     height: auto;
+    aspect-ratio: 3 / 4;
+    object-fit: cover;
     transition: transform .7s var(--ease);
 }
 .cover figcaption {
@@ -1522,6 +1525,10 @@ html.reveal [data-reveal].is-visible {
     color: var(--text-mute);
     font-size: .8rem;
     line-height: 1.7;
+}
+.covers + .source-note {
+    margin-top: -1.6rem;
+    margin-bottom: 2.4rem;
 }
 
 /* --- 荣誉墙 --- */
