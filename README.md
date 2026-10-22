@@ -79,7 +79,8 @@ python -m http.server 8000
 ## 部署
 
 托管在 GitHub Pages：`main` 分支根目录，推送到 `main` 后会自动发布，通常一两分钟生效。
-页面引用了 `style.css?v=7` 和 `ggb.js?v=7`，改动这两个文件后如果线上没更新，把 `?v=` 后面的数字加一即可绕过缓存。
+页面引用了 `style.css?v=8` 和 `ggb.js?v=8`，改动这两个文件后如果线上没更新，把 `?v=` 后面的数字加一即可绕过缓存。
+角色形象图改动较大时，也可以换个文件名（例如 `char_zhuzhuxia.jpg` → `char_zhuzhuxia_gg.jpg`），新 URL 能直接绕开浏览器缓存。
 
 ---
 

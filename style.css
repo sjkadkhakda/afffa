@@ -1129,6 +1129,7 @@ html.reveal [data-reveal].is-visible {
     left: 0;
     right: 0;
     height: 3px;
+    z-index: 2;
     background: linear-gradient(90deg, var(--accent), transparent 85%);
 }
 .file-card:hover {
@@ -1138,6 +1139,7 @@ html.reveal [data-reveal].is-visible {
 }
 .file-card__media {
     position: relative;
+    overflow: hidden;
     margin: calc(var(--card-pad-y) * -1) calc(var(--card-pad-x) * -1) 0;
     background:
         radial-gradient(58% 48% at 50% 24%, rgba(255, 255, 255, .07), transparent 72%),
